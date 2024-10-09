@@ -13,6 +13,43 @@ export default function ChatList() {
         </div>
         <img onClick={() => setAddRemove(prevState => !prevState)} className='addImg' src={addRemove ? "/plus.png" : "/minus.png"} alt="plus.png" />
       </div>
+      <div className="chatItemContainer">
+      <div className="chatItem">
+        <img className="chatListUserImg" src="/avatar.png" alt="chatListUserImg.png" />
+        <div className="chatListUserInfo">
+          <span>Jane Doe</span>
+          <p>Hello</p>
+        </div>
+      </div>
+      <div className="chatItem">
+        <img className="chatListUserImg" src="/avatar.png" alt="chatListUserImg.png" />
+        <div className="chatListUserInfo">
+          <span>Jane Doe</span>
+          <p>Hello</p>
+        </div>
+      </div>
+      <div className="chatItem">
+        <img className="chatListUserImg" src="/avatar.png" alt="chatListUserImg.png" />
+        <div className="chatListUserInfo">
+          <span>Jane Doe</span>
+          <p>Hello</p>
+        </div>
+      </div>
+      <div className="chatItem">
+        <img className="chatListUserImg" src="/avatar.png" alt="chatListUserImg.png" />
+        <div className="chatListUserInfo">
+          <span>Jane Doe</span>
+          <p>Hello</p>
+        </div>
+      </div>
+      <div className="chatItem">
+        <img className="chatListUserImg" src="/avatar.png" alt="chatListUserImg.png" />
+        <div className="chatListUserInfo">
+          <span>Jane Doe</span>
+          <p>Hello</p>
+        </div>
+      </div>
+      </div>
     </div>
   )
 }

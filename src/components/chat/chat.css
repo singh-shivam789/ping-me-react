@@ -1,3 +1,4 @@
 .chat{
     flex: 2;
+    border-right: 1.5px solid rgb(245, 245, 245, 0.35);
 }

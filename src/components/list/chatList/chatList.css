@@ -28,6 +28,7 @@
             padding: 8px;
             height: 36px;
             width: 36px;
+            object-fit: cover;
         }
 
         input:hover{
@@ -44,8 +45,36 @@
         height: 36px;
         width: 36px;
     }
-
     .addImg:hover{
         cursor: pointer;
+    }
+    margin-bottom: 20px;
+}
+
+.chatItemContainer{
+    display: flex;
+    flex-direction: column;
+    /* overflow: scroll;
+    max-height: 800px; */
+}
+
+.chatItem{
+    display: flex;
+    padding: 20px;
+    gap: 15px;
+    border-bottom: 1.5px solid rgb(245, 245, 245, 0.35);
+    .chatListUserInfo{
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        p{
+            font-size: small;
+        }
+    }
+    .chatListUserImg{
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
     }
 }
