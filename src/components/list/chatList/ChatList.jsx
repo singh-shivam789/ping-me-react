@@ -15,6 +15,8 @@ export default function ChatList() {
       </div>
       <div className="chatItemContainer">
         <ChatItem />
+        <ChatItem />
+        <ChatItem />
       </div>
     </div>
   )

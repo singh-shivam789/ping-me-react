@@ -1,17 +1,19 @@
-.search{
+.search {
     display: flex;
     align-items: center;
     justify-content: space-around;
-    .searchBar{
+
+    .searchBar {
         width: 70%;
         display: flex;
         align-items: center;
-        background-color:  rgb(69, 95, 99, 0.5);
-        -webkit-backdrop-filter:  blur(15px) brightness(0.85);
-        backdrop-filter: blur(15px) brightness(0.85);
+        background-color: rgb(69, 95, 99, 0.5);
+        -webkit-backdrop-filter: blur(10px) brightness(0.5) saturate(120%);
+        backdrop-filter: blur(10px) brightness(0.5) saturate(120%);
         border-radius: 8px;
-        border:1px solid rgb(69, 95, 99, 0.5);
-        input{
+        border: 1px solid rgb(69, 95, 99, 0.5);
+
+        input {
             width: 85%;
             background-color: transparent;
             border: none;
@@ -24,54 +26,63 @@
         input::placeholder {
             color: whitesmoke !important;
         }
-        .searchImg{
+
+        .searchImg {
             padding: 8px;
             height: 36px;
             width: 36px;
             object-fit: cover;
         }
 
-        input:hover{
+        input:hover {
             cursor: pointer;
         }
     }
-    .addImg{
-        background-color:  rgb(69, 95, 99, 0.5);
-        -webkit-backdrop-filter:  blur(15px) brightness(0.85);
+
+    .addImg {
+        background-color: rgb(69, 95, 99, 0.5);
+        -webkit-backdrop-filter: blur(15px) brightness(0.85);
         backdrop-filter: blur(15px) brightness(0.85);
         border-radius: 8px;
-        border:1px solid rgb(69, 95, 99, 0.5);
+        border: 1px solid rgb(69, 95, 99, 0.5);
         padding: 8px;
         height: 36px;
         width: 36px;
     }
-    .addImg:hover{
+
+    .addImg:hover {
         cursor: pointer;
     }
+
     margin-bottom: 20px;
 }
 
-.chatItemContainer{
+.chatItemContainer {
     display: flex;
     flex-direction: column;
     /* overflow: scroll;
     max-height: 800px; */
 }
 
-.chatItem{
+.chatItem {
     display: flex;
     padding: 20px;
     gap: 15px;
     border-bottom: 1.5px solid rgb(245, 245, 245, 0.35);
-    .chatListUserInfo{
+
+    .chatListUserInfo {
         display: flex;
         flex-direction: column;
-        gap: 5px;
-        p{
-            font-size: small;
+        justify-content: space-around;
+        span{
+            font-size: 18px;
+        }
+        p {
+            font-size: 15px;
         }
     }
-    .chatListUserImg{
+
+    .chatListUserImg {
         border-radius: 50%;
         width: 50px;
         height: 50px;

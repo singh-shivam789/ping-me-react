@@ -2,8 +2,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
-    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  font-family: "Comic Neue";
 }
 
 html {
@@ -24,9 +23,9 @@ body{
 .container{
   width: 90vw;
   height: 90vh;
-  background-color: rgb(69, 95, 99, 0.5); /* A solid color */
-  -webkit-backdrop-filter: blur(8px) brightness(0.85) saturate(150%); 
-  backdrop-filter: blur(8px) brightness(0.85) saturate(150%);
+  background-color: rgb(69, 95, 99, 0.5);
+  -webkit-backdrop-filter: blur(8px) brightness(0.75) saturate(150%); 
+  backdrop-filter: blur(8px) brightness(0.75) saturate(150%);
   border-radius: 10px;
   border: 0.2px solid black;
   display: flex;

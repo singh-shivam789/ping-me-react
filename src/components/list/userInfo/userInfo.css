@@ -74,6 +74,11 @@
 }
 
 .userStatus{
-    font-size: smaller;
+    font-size: 15px;
     color: lightgray;
+}
+
+h3{
+    font-size: 20px;
+    font-weight: 900 !important;
 }

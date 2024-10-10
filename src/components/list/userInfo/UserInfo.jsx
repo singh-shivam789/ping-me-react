@@ -9,7 +9,7 @@ export default function UserInfo({ user }) {
           <>
             {user === "chatTop" ? (
               <>
-                <h4>Akinchand</h4>
+                <h3>Akinchand</h3>
                 <p className="userStatus">Lorem ipsum, dolor sit amet consectetur</p>
               </>
             ) : (
