@@ -1,4 +1,4 @@
-import React from 'react'
+import UtilityIcons from './UtilityIcons'
 import './userInfo.css'
 export default function UserInfo({ user }) {
   return (
@@ -16,14 +16,9 @@ export default function UserInfo({ user }) {
               <h2>Akinchand</h2>
             )}
           </>
-
         </div>
       </div>
-      <div className={user === "chatTop" ? "iconsChat" : "iconsList"}>
-        <img src={user === "chatTop" ? "/phone.png" : "/more.png"} />
-        <img src="/video.png" />
-        <img src={user === "chatTop" ? "/info.png" : "/edit.png"} />
-      </div>
+      <UtilityIcons user={user} />
     </div>
   )
 }
