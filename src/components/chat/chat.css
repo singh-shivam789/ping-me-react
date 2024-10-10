@@ -1,6 +1,9 @@
 .chat {
     flex: 2;
     border-right: 1.5px solid rgb(245, 245, 245, 0.35);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 .chatBottom {
@@ -8,17 +11,19 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    border-top: 1.5px solid rgb(245, 245, 245, 0.35);
+    margin-top: auto;
 
     .emojiSend {
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 15px
+        gap: 15px;
     }
 
     .typeBar {
         padding: 4px;
-        width: 70%;
+        width: 72%;
         background-color: rgb(69, 95, 99, 0.2);
         border-radius: 5px;
         color: whitesmoke !important;
@@ -26,7 +31,7 @@
     }
 
     .typeBar>input {
-        width: 96%;
+        width: 95%;
         overflow: hidden;
         padding: 8px;
         font-size: 15px;
@@ -53,9 +58,23 @@
 
     .emoji {
         cursor: pointer;
-        width: 35px;
+        width: 25px;
         border-radius: 50%;
         background-color: whitesmoke;
         border: 0.5px solid whitesmoke;
     }
+
+    .emojiPickerContainer{
+        position: relative;
+        .emojiPicker{
+            position: absolute;
+            left: -40px;
+            bottom: 40px;
+        }
+    }
+}
+
+.chatMiddle{
+    padding: 20px;
+    flex: 1;
 }
