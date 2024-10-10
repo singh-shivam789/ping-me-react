@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import './chatList.css'
-
+import ChatItem from './ChatItem'
 export default function ChatList() {
   const [addRemove, setAddRemove] = useState(true)
   
@@ -14,41 +14,7 @@ export default function ChatList() {
         <img onClick={() => setAddRemove(prevState => !prevState)} className='addImg' src={addRemove ? "/plus.png" : "/minus.png"} alt="plus.png" />
       </div>
       <div className="chatItemContainer">
-      <div className="chatItem">
-        <img className="chatListUserImg" src="/avatar.png" alt="chatListUserImg.png" />
-        <div className="chatListUserInfo">
-          <span>Jane Doe</span>
-          <p>Hello</p>
-        </div>
-      </div>
-      <div className="chatItem">
-        <img className="chatListUserImg" src="/avatar.png" alt="chatListUserImg.png" />
-        <div className="chatListUserInfo">
-          <span>Jane Doe</span>
-          <p>Hello</p>
-        </div>
-      </div>
-      <div className="chatItem">
-        <img className="chatListUserImg" src="/avatar.png" alt="chatListUserImg.png" />
-        <div className="chatListUserInfo">
-          <span>Jane Doe</span>
-          <p>Hello</p>
-        </div>
-      </div>
-      <div className="chatItem">
-        <img className="chatListUserImg" src="/avatar.png" alt="chatListUserImg.png" />
-        <div className="chatListUserInfo">
-          <span>Jane Doe</span>
-          <p>Hello</p>
-        </div>
-      </div>
-      <div className="chatItem">
-        <img className="chatListUserImg" src="/avatar.png" alt="chatListUserImg.png" />
-        <div className="chatListUserInfo">
-          <span>Jane Doe</span>
-          <p>Hello</p>
-        </div>
-      </div>
+        <ChatItem />
       </div>
     </div>
   )
