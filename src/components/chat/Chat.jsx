@@ -1,6 +1,6 @@
  
 import ChatBottom from './ChatBottom'
-import ChatMiddle from './ChatMiddle'
+import ChatContainer from './ChatContainer'
 import ChatTop from './ChatTop'
 
 import './chat.css'
@@ -9,7 +9,7 @@ export default function Chat() {
   return (
     <div className='chat'>
       <ChatTop />
-      <ChatMiddle />
+      <ChatContainer />
       <ChatBottom />
     </div>
   )

@@ -30,4 +30,17 @@ body{
   border: 0.2px solid black;
   display: flex;
   color: whitesmoke;
+
+  *::-webkit-scrollbar-thumb{
+    width: 5px;
+    border-radius: 5px;
+    border: 0.1px solid whitesmoke;
+    background-color:  rgb(69, 95, 99, 0.5);
+  }
+
+  *::-webkit-scrollbar{
+    border-radius: 5px;
+    width: 5px;
+    background-color:  rgb(69, 95, 99);
+  }
 }
