@@ -18,19 +18,19 @@
     height: 50px;   
 }
 
-.iconsList{
+.listIcons{
     display: flex;
     width: 25%;
     justify-content: space-between;
 }
 
-.iconsList > img{
+.listIcons > img{
     width: 20px;
     height: 20px;
     transition: color 0.3s ease-in;
 }
 
-.iconsList > img:hover{
+.listIcons > img:hover{
     cursor: pointer;
     color: darkgray;
 }
@@ -56,19 +56,19 @@
     height: 60px;   
 }
 
-.iconsChat{
+.chatIcons{
     display: flex;
     width: 12%;
     justify-content: space-between;
 }
 
-.iconsChat > img{
+.chatIcons > img{
     width: 20px;
     height: 20px;
     transition: color 0.3s ease-in !important;
 }
 
-.iconsChat > img:hover{
+.chatIcons > img:hover{
     cursor: pointer;
     color: darkgray;
 }

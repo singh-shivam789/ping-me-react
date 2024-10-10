@@ -1,9 +1,8 @@
- 
-
+import UtilityIcons from "../list/userInfo/UtilityIcons"
 export default function ChatBottom() {
   return (
     <div className="chatBottom">
-      <div className="icons"></div>
+      <UtilityIcons user="chatBottom"/>
       <div className="typeBar">
         <input type="text" placeholder="Type a message..."/>
       </div>
