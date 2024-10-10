@@ -1,16 +1,20 @@
 import React from 'react'
 import './userInfo.css'
-export default function UserInfo() {
+export default function UserInfo({user}) {
   return (
-    <div className='userInfo'>
-        <div className='user'>
-            <img src='/avatar.png'></img>
-            <h2>Akinchand</h2>
+    <div className={user == "chatTop" ? "userInfoChat": "userInfoList"}>
+        <div className={user == "chatTop" ? "userChat": "userList"}>
+            <img src="/avatar.png"></img>
+            <div>
+            {user == "chatTop" && <h4>Akinchand</h4>}
+            {user != "chatTop" && <h2>Akinchand</h2>}
+            {user == "chatTop" && <p className='userStatus'>Lorem ipsum, dolor sit amet consectetur </p>}
+            </div>
         </div>
-        <div className='icons'>
-            <img src='/more.png'></img>
-            <img src='/video.png'></img>
-            <img src='/edit.png'></img>
+        <div className={user == "chatTop" ? "iconsChat": "iconsList"}>
+            <img src={user == "chatTop" ? "/phone.png" : "/more.png"}/>
+            <img src="/video.png"/>
+            <img src={user == "chatTop" ? "/info.png" : "/edit.png"}/>
         </div>
     </div>
   )

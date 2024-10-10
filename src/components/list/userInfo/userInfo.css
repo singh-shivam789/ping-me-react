@@ -1,36 +1,79 @@
-.userInfo{
+.userInfoList{
     padding: 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
-.user{
+.userList{
     min-width: 45%;
     display: flex;
     align-items: center;
     gap: 15px;
 }
 
-.user > img{
+.userList > img{
     border-radius: 50%;
     width: 50px;
     height: 50px;   
 }
 
-.icons{
+.iconsList{
     display: flex;
     width: 25%;
     justify-content: space-between;
 }
 
-.icons > img{
+.iconsList > img{
     width: 20px;
     height: 20px;
     transition: color 0.3s ease-in;
 }
 
-.icons > img:hover{
+.iconsList > img:hover{
     cursor: pointer;
     color: darkgray;
+}
+
+.userInfoChat{
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1.5px solid rgb(245, 245, 245, 0.35);
+}
+
+.userChat{
+    min-width: 45%;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.userChat > img{
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;   
+}
+
+.iconsChat{
+    display: flex;
+    width: 12%;
+    justify-content: space-between;
+}
+
+.iconsChat > img{
+    width: 20px;
+    height: 20px;
+    transition: color 0.3s ease-in !important;
+}
+
+.iconsChat > img:hover{
+    cursor: pointer;
+    color: darkgray;
+}
+
+.userStatus{
+    font-size: smaller;
+    color: lightgray;
 }
