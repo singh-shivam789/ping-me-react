@@ -7,11 +7,13 @@ export default function Detail() {
     <div className="detail">
       <UserInfo user={"userDetail"} />
       <Options />
-      <div className="blockUser">
-        <button>Block User</button>
-      </div>
-      <div className="logout">
-        <button>Logout</button>
+      <div className="logoutAndBlock">
+        <div className="blockUser">
+          <button className="blockUserBtn">Block User</button>
+        </div>
+        <div className="logout">
+          <button className="logoutBtn">Logout</button>
+        </div>
       </div>
     </div>
   )
