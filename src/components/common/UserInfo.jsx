@@ -1,5 +1,5 @@
-import UtilityIcons from './UtilityIcons'
-import './userInfo.css'
+import UtilityIcons from "./UtilityIcons"
+import "./common.css"
 export default function UserInfo({ user }) {
   return (
     <div className={user === "chatTop" ? "userInfoChat" : "userInfoList"}>

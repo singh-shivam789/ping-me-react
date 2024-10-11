@@ -4,10 +4,10 @@ import List from "./components/list/List"
 
 const App = () => {
   return (
-    <div className='container'>
+    <div className="container">
       <List />
-      <Chat/>
-      <Detail/>
+      <Chat />
+      <Detail />
     </div>
   )
 }

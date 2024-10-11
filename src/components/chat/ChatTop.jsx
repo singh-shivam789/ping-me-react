@@ -1,8 +1,8 @@
  
-import UserInfo from '../list/userInfo/UserInfo'
+import UserInfo from "../common/UserInfo"
 export default function ChatTop() {
   return (
-    <div className='chatTop'>
+    <div className="chatTop">
         <UserInfo user={"chatTop"}/> 
     </div>
   )

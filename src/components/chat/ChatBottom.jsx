@@ -1,5 +1,5 @@
 import { memo, useState } from "react";
-import UtilityIcons from "../list/userInfo/UtilityIcons"
+import UtilityIcons from "../common/UtilityIcons"
 import EmojiPicker from "emoji-picker-react";
 const ChatBottom = () => {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
