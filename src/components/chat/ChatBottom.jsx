@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { memo, useState } from "react";
 import UtilityIcons from "../list/userInfo/UtilityIcons"
 import EmojiPicker from "emoji-picker-react";
-export default function ChatBottom() {
+const ChatBottom = () => {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [inputText, setInputText] = useState("")
   const emojiClickHandler = (event) => {
@@ -28,3 +28,4 @@ export default function ChatBottom() {
     </div>
   )
 }
+export default memo(ChatBottom)
