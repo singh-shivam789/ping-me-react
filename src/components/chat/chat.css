@@ -80,15 +80,17 @@
         overflow-y: auto;
         display: flex;
         flex-direction: column;
-        gap: 20px;
+        gap: 25px;
 
         .message {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 6px;
+
             &.ours {
                 align-self: flex-end;
                 max-width: 65%;
+
                 .text {
                     background-color: rgb(69, 95, 99, 0.5);
                     -webkit-backdrop-filter: blur(5px) brightness(0.5) saturate(120%);
@@ -102,17 +104,20 @@
                 flex-direction: row;
                 align-self: flex-start;
                 max-width: 70%;
+
                 .text {
                     color: black;
                     background-color: rgb(245, 245, 245, 0.9);
                     -webkit-backdrop-filter: blur(5px) brightness(0.5) saturate(120%);
                     backdrop-filter: blur(5px) brightness(0.5) saturate(120%);
                 }
-                .messageContainer{
+
+                .messageContainer {
                     gap: 10px;
                     display: flex;
                     flex-direction: column;
                 }
+
                 .avatar {
                     width: 35px;
                     height: 35px;
@@ -128,6 +133,10 @@
             .messageImage {
                 max-width: 100%;
                 border-radius: 8px;
+            }
+
+            .messageTime{
+                font-size: 12px;
             }
         }
     }
