@@ -11,36 +11,36 @@ html {
   margin: 0;
 }
 
-body{
+body {
   min-height: 100vh;
   min-width: 100vw;
-  background-image: url("/bg.jpg");  
+  background-image: url("/bg.jpg");
   display: flex;
   justify-content: center !important;
   align-items: center !important;
 }
 
-.container{
+.container {
   width: 90vw;
   height: 90vh;
   background-color: rgb(69, 95, 99, 0.5);
-  -webkit-backdrop-filter: blur(8px) brightness(0.75) saturate(150%); 
+  -webkit-backdrop-filter: blur(8px) brightness(0.75) saturate(150%);
   backdrop-filter: blur(8px) brightness(0.75) saturate(150%);
   border-radius: 10px;
   border: 0.2px solid black;
   display: flex;
   color: whitesmoke;
 
-  *::-webkit-scrollbar-thumb{
+  *::-webkit-scrollbar-thumb {
     width: 5px;
     border-radius: 5px;
     border: 0.1px solid whitesmoke;
-    background-color:  rgb(69, 95, 99, 0.5);
+    background-color: rgb(69, 95, 99, 0.5);
   }
 
-  *::-webkit-scrollbar{
+  *::-webkit-scrollbar {
     border-radius: 5px;
     width: 5px;
-    background-color:  rgb(69, 95, 99);
+    background-color: rgb(69, 95, 99);
   }
 }

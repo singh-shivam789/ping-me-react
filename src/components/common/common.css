@@ -1,41 +1,41 @@
-.userInfoList{
+.userInfoList {
     padding: 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
-.userList{
+.userList {
     min-width: 45%;
     display: flex;
     align-items: center;
     gap: 15px;
 }
 
-.userList > img{
+.userList>img {
     border-radius: 50%;
     width: 50px;
-    height: 50px;   
+    height: 50px;
 }
 
-.listIcons{
+.listIcons {
     display: flex;
     width: 25%;
     justify-content: space-between;
 }
 
-.listIcons > img{
+.listIcons>img {
     width: 20px;
     height: 20px;
     transition: color 0.3s ease-in;
 }
 
-.listIcons > img:hover{
+.listIcons>img:hover {
     cursor: pointer;
     color: darkgray;
 }
 
-.userInfoChat{
+.userInfoChat {
     padding: 20px;
     display: flex;
     align-items: center;
@@ -43,42 +43,72 @@
     border-bottom: 1.5px solid rgb(245, 245, 245, 0.35);
 }
 
-.userChat{
+.userChat {
     min-width: 45%;
     display: flex;
     align-items: center;
     gap: 15px;
 }
 
-.userChat > img{
+.userChat>img {
     border-radius: 50%;
     width: 60px;
-    height: 60px;   
+    height: 60px;
 }
 
-.chatIcons{
+.chatIcons {
     display: flex;
     width: 12%;
     justify-content: space-between;
 }
 
-.chatIcons > img{
+.chatIcons>img {
     width: 20px;
     height: 20px;
     transition: color 0.3s ease-in !important;
 }
 
-.chatIcons > img:hover{
+.chatIcons>img:hover {
     cursor: pointer;
     color: darkgray;
 }
 
-.userStatus{
+.userStatus {
     font-size: 15px;
     color: lightgray;
 }
 
-h3{
+h3 {
     font-size: 20px;
     font-weight: 900 !important;
+}
+
+.userDetailContainer {
+    border-bottom: 1.5px solid rgb(245, 245, 245, 0.35);
+    width: 100%;
+    padding: 20px;
+
+    .userDetail {
+        display: flex;
+        flex-direction: column !important;
+        align-items: center;
+        gap: 10px;
+
+        img {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+        }
+
+        .userDetailNameStatus {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+
+            p {
+                color: whitesmoke;
+            }
+        }
+    }
 }
