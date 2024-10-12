@@ -1,0 +1,66 @@
+.login {
+    background-color: rgb(245, 245, 245, 0.7);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: darkslategrey;
+    padding: 5%;
+    border-radius: 10px;
+
+    .signup,
+    .signin {
+        text-align: center;
+        gap: 20px;
+        display: flex;
+        flex-direction: column;
+        padding: 15%;
+        width: 50%;
+        height: 100%;
+
+        input {
+            border: none;
+            outline: none;
+            cursor: pointer;
+            color: whitesmoke;
+            -webkit-backdrop-filter: blur(150px) brightness(0.7) saturate(110%);
+            backdrop-filter: blur(150px) brightness(0.7) saturate(110%);
+            background-color: rgba(69, 95, 99, 0.08);
+            border: 1px rgb(69, 95, 99, 0.5);
+            padding: 20px;
+            border-radius: 5px;
+        }
+
+        .btn {
+            background-color: whitesmoke;
+            color: darkslategrey;
+        }
+
+        input::placeholder {
+            color: whitesmoke;
+        }
+    }
+
+    .signin {
+        border-right: 1px solid white;
+    }
+
+    .signup {
+        padding: 8% 13%;
+
+        .imgUpload {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: darkslategrey;
+            text-decoration: underline;
+            font-size: 20px;
+
+            img {
+                width: 50px;
+                height: 50px;
+            }
+        }
+    }
+}

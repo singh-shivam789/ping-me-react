@@ -27,7 +27,6 @@ body {
   -webkit-backdrop-filter: blur(8px) brightness(0.75) saturate(150%);
   backdrop-filter: blur(8px) brightness(0.75) saturate(150%);
   border-radius: 10px;
-  border: 0.2px solid black;
   display: flex;
   color: whitesmoke;
 
