@@ -1,7 +1,13 @@
+import { useEffect } from "react"
+import { useRef } from "react"
 export default function ChatContainer() {
+  useEffect(() => {
+    msgScrollRef.current.scrollIntoView(true)
+  }, [])
+  const msgScrollRef = useRef(null);
   return (
     <div className="chatContainer">
- <div className="message theirs">
+      <div className="message theirs">
         <img src="/avatar.png" alt="user.png" className="avatar" />
         <div className="messageContainer">
           <div className="text">
@@ -14,7 +20,6 @@ export default function ChatContainer() {
           <span className="messageTime">1 min ago</span>
         </div>
       </div>
-
       <div className="message ours">
         <img className="messageImage" src="https://w0.peakpx.com/wallpaper/371/259/HD-wallpaper-forza-forza-horizon-4-car.jpg" alt="" />
         <div className="text">
@@ -27,7 +32,6 @@ export default function ChatContainer() {
         </div>
         <span className="messageTime">1 min ago</span>
       </div>
-
       <div className="message theirs">
         <img src="/avatar.png" alt="user.png" className="avatar" />
         <div className="messageContainer">
@@ -42,6 +46,7 @@ export default function ChatContainer() {
           <span className="messageTime">1 min ago</span>
         </div>
       </div>
+      <div ref={msgScrollRef} className="scroll"></div>
     </div>
   )
 }
