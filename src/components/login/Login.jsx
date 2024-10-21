@@ -6,6 +6,7 @@ import { query } from "firebase/firestore";
 import { toast } from "react-toastify";
 import { useState } from "react";
 import "./login.css"
+import Loading from "../common/Loading";
 
 export default function Login() {
     const [isLoading, setIsLoading] = useState(false);
@@ -106,7 +107,7 @@ export default function Login() {
                 <h1>Welcome back</h1>
                 <input required type="email" name="email" placeholder="Email" />
                 <input required type="password" name="password" placeholder="Password" />
-                {isLoading ? <img className="spinner" src="/loading.gif" /> : <input className="btn" type="submit" value="Sign In" />}
+                {isLoading ? <Loading page={"login"} /> : <input className="btn" type="submit" value="Sign In" />}
             </form>
             <form className="signup" onSubmit={handleSignUp}>
                 <h1>Create Account</h1>
@@ -118,7 +119,7 @@ export default function Login() {
                 <input required type="text" name="username" placeholder="Username" />
                 <input required type="email" name="email" placeholder="Email" />
                 <input required type="password" name="password" placeholder="Password" />
-                {isLoading ? <img className="spinner" src="/loading.gif" /> : <input className="btn" type="submit" value="Sign Up" />}
+                {isLoading ? <Loading page={"login"} /> : <input className="btn" type="submit" value="Sign Up" />}
             </form>
         </div>
     )
