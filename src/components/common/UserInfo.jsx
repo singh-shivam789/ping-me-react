@@ -1,6 +1,9 @@
+import { useUserStore } from "../../lib/userStore";
 import UtilityIcons from "./UtilityIcons"
 import "./common.css"
 export default function UserInfo({ user }) {
+  const { currentUser } = useUserStore();
+
   return (
     <div className={user === "chatTop" ? "userInfoChat" : user === "userDetail" ? "userDetailContainer" : "userInfoList"}>
       <div className={
@@ -8,15 +11,15 @@ export default function UserInfo({ user }) {
           : user === "userDetail" ? "userDetail"
             : "userList"}
       >
-        <img src="/avatar.png" />
+        <img src={currentUser.avatar || "/avatar.png"} />
         {
           user === "chatTop" || user === "userDetail" ? (
             <div className={user == "userDetail" ? "userDetailNameStatus" : ""}>
-              {user == "userDetail" ? <h2>Akinchand</h2> : <h3>Akinchand</h3>}
+              {user == "userDetail" ? <h2>{currentUser.username}</h2> : <h3>{currentUser.username}</h3>}
               <p className="userStatus">Lorem ipsum, dolor sit amet consectetur</p>
             </div>
           ) : (
-            <h2>Akinchand</h2>
+            <h2>{currentUser.username}</h2>
           )
         }
       </div>

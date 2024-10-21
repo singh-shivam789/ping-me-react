@@ -4,11 +4,11 @@ import { db } from "./firebase";
 export const useUserStore = create((set) => {
     return {
         currentUser: null,
-        isLoading: false,
-        fetchCurrentUserInfo: async (userAuth) => {
-            if (!userAuth.uid) return set({ currentUser: null, isLoading: false });
+        isLoading: true,
+        fetchCurrentUserInfo: async (uid) => {
+            if (!uid) return set({ currentUser: null, isLoading: false });
             try {
-                const userDocRef = doc(db, "users", userAuth.uid);
+                const userDocRef = doc(db, "users", uid);
                 const userDocSnap = await getDoc(userDocRef)
                 if (userDocSnap.exists()) {
                     console.log(userDocSnap.data());

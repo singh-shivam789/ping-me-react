@@ -1,12 +1,11 @@
 import { auth } from "../../lib/firebase";
-import { signOut } from "firebase/auth";
 import UserInfo from "../common/UserInfo"
 import Options from "./options/Options"
 import "./detail.css"
 
 export default function Detail() {
   const handleLogOut = async (e) => {
-    signOut(auth);
+    auth.signOut();
   }
   return (
     <div className="detail">

@@ -13,13 +13,13 @@ const App = () => {
   const { currentUser, isLoading, fetchCurrentUserInfo } = useUserStore();
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (userAuth) => {
-      fetchCurrentUserInfo(userAuth)
+      fetchCurrentUserInfo(userAuth?.uid)
     })
     return () => { unsubscribe() };
   }, [fetchCurrentUserInfo])
 
   if (isLoading) return (<Loading page={"app"} />)
-  return (
+  else return (
     <div className="container">
       {currentUser ? (<>
         <List />
@@ -31,4 +31,4 @@ const App = () => {
   )
 }
 
-export default App
+export default App;
