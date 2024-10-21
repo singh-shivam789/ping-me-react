@@ -11,7 +11,7 @@
     gap: 10px;
     width: 100%;
     padding: 20px;
-    
+
     .option {
         display: flex;
         justify-content: space-between;
@@ -104,6 +104,7 @@
 
     .blockUserBtn:hover {
         background-color: rgba(184, 25, 25);
+        cursor: pointer;
     }
 
     .logoutBtn {
@@ -114,6 +115,6 @@
     .logoutBtn:hover {
         background-color: whitesmoke;
         color: black;
-
+        cursor: pointer;
     }
 }
