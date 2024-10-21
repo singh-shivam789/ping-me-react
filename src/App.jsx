@@ -1,14 +1,27 @@
+import { useEffect } from "react";
+import { auth } from "./lib/firebase";
 import Chat from "./components/chat/Chat"
 import Detail from "./components/detail/Detail"
 import List from "./components/list/List"
 import Login from "./components/login/Login";
+import { onAuthStateChanged } from "firebase/auth";
 import Notification from "./components/notification/Notification";
+import { useUserStore } from "./lib/userStore";
+import Loading from "./components/common/Loading";
 
 const App = () => {
-  let user = false;
+  const { currentUser, isLoading, fetchCurrentUserInfo } = useUserStore();
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (userAuth) => {
+      fetchCurrentUserInfo(userAuth)
+    })
+    return () => { unsubscribe() };
+  }, [fetchCurrentUserInfo])
+
+  if (isLoading) return (<Loading page={"app"} />)
   return (
     <div className="container">
-      {user ? (<>
+      {currentUser ? (<>
         <List />
         <Chat />
         <Detail />
