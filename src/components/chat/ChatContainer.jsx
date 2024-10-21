@@ -7,7 +7,7 @@ export default function ChatContainer() {
           behavior: "smooth",
           block: "start",
         });
-      }, 100);
+      }, 20);
     }
   })
   const msgScrollRef = useRef(null);
