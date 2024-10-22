@@ -1,16 +1,15 @@
 import { useEffect, useRef } from "react"
 export default function ChatContainer() {
+  const msgScrollRef = useRef(null);
   useEffect(() => {
     if (msgScrollRef.current) {
       setTimeout(function () {
         msgScrollRef.current.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
+          behavior: "smooth"
         });
-      }, 20);
+      }, 25);
     }
-  })
-  const msgScrollRef = useRef(null);
+  }, [])
   return (
     <div className="chatContainer">
       <div className="message theirs">

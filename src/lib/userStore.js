@@ -11,7 +11,6 @@ export const useUserStore = create((set) => {
                 const userDocRef = doc(db, "users", uid);
                 const userDocSnap = await getDoc(userDocRef)
                 if (userDocSnap.exists()) {
-                    console.log(userDocSnap.data());
                     return set({ currentUser: userDocSnap.data(), isLoading: false });
                 }
                 else return set({ currentUser: null, isLoading: false });

@@ -1,8 +1,6 @@
-
-import ChatBottom from "./ChatBottom"
 import ChatContainer from "./ChatContainer"
+import ChatBottom from "./ChatBottom"
 import ChatTop from "./ChatTop"
-
 import "./chat.css"
 
 export default function Chat() {

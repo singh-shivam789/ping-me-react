@@ -120,8 +120,8 @@ export default function Login() {
                     type="text"
                     name="username"
                     placeholder="Username"
-                    minlength="3"
-                    maxlength="15"
+                    minLength="3"
+                    maxLength="15"
                     pattern="^[a-zA-Z0-9_]+$"
                     title="Username should be 3-15 characters long and contain only letters, numbers, and underscores."
                 />
@@ -130,8 +130,8 @@ export default function Login() {
                     type="password"
                     name="password"
                     placeholder="Password"
-                    minlength="3"
-                    maxlength="15"
+                    minLength="3"
+                    maxLength="15"
                     pattern="^[a-zA-Z0-9_@]+$"
                     title="Password should be 3-15 characters long and contain only letters, numbers, and underscores." />
                 {isLoading ? <Loading page={"login"} /> : <input className="btn" type="submit" value="Sign Up" />}

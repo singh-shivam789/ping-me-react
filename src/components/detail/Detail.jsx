@@ -2,10 +2,18 @@ import { auth } from "../../lib/firebase";
 import UserInfo from "../common/UserInfo"
 import Options from "./options/Options"
 import "./detail.css"
+import { toast } from "react-toastify";
 
 export default function Detail() {
   const handleLogOut = async (e) => {
-    auth.signOut();
+    try {
+      auth.signOut();
+      toast.dark("Bye!");
+    }
+    catch (err) {
+      console.log(err);
+      toast.error("Something went wrong!");
+    }
   }
   return (
     <div className="detail">
