@@ -1,9 +1,9 @@
+import AddFriend from "../../addFriend/AddFriend"
+import ChatItem from "./ChatItem"
 import { useState } from "react"
 import "./chatList.css"
-import ChatItem from "./ChatItem"
 export default function ChatList() {
-  const [addRemove, setAddRemove] = useState(true)
-
+  const [addRemove, setAddRemove] = useState(false)
   return (
     <div className="chatList">
       <div className="search">
@@ -11,7 +11,7 @@ export default function ChatList() {
           <img className="searchImg" src="/search.png" alt="search.png" />
           <input type="text" placeholder="Search" />
         </div>
-        <img onClick={() => setAddRemove(prevState => !prevState)} className="addImg" src={addRemove ? "/plus.png" : "/minus.png"} alt="plus.png" />
+        <img onClick={() => setAddRemove(prevState => !prevState)} className="addImg" src={addRemove ? "/minus.png" : "/plus.png"} alt="plus.png" />
       </div>
       <div className="chatItemContainer">
         <ChatItem />
@@ -21,6 +21,7 @@ export default function ChatList() {
         <ChatItem />
         <ChatItem />
       </div>
+      {addRemove && <AddFriend />}
     </div>
   )
 }

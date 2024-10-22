@@ -1,1 +1,63 @@
-.addFriend {}
+.addFriend {
+    border: 1px solid black;
+    width: 16vw;
+    padding: 25px 20px;
+    background-color: rgba(69, 95, 99, 0.08);
+    -webkit-backdrop-filter: blur(5px) brightness(0.5) saturate(120%);
+    backdrop-filter: blur(10px) brightness(0.5) saturate(120%);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    color: whitesmoke;
+    position: absolute;
+    top: 45%;
+    left: 40%;
+    z-index: 2;
+    overflow-y: auto;
+
+    input {
+        outline: none;
+        border: none;
+        padding: 15px 12px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .friend,
+    .addFriendForm {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .friendInfo {
+        gap: 20px !important;
+        display: flex;
+        align-items: center;
+
+        img {
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            object-fit: fill;
+        }
+    }
+
+    .friend {
+        margin-top: 40px;
+
+        button {
+            outline: none;
+            border: none;
+            border-radius: 5px;
+            height: fit-content;
+            padding: 5px;
+            cursor: pointer;
+        }
+    }
+
+    .addFriendSearchBar,
+    .friendInfo {
+        width: 67%;
+    }
+}
