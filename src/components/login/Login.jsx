@@ -49,11 +49,11 @@ export default function Login() {
                 const formData = new FormData(form);
                 const { email, password, username } = Object.fromEntries(formData);
                 const db_ref = collection(db, "users");
-                const isExistingUserQuery = query(db_ref, where("email", "==", email));
-                const isExistingUser = await getDocs(isExistingUserQuery);
-                if (!isExistingUser.empty) {
-                    return toast.warn("Email already in use!");
-                }
+                const userEmailQuery = query(db_ref, where("email", "==", email));
+                const userEmailDoc = await getDocs(userEmailQuery);
+                const usernameQuery = query(db_ref, where("username", "==", username));
+                const usernameDoc = await getDocs(usernameQuery);
+                if (!userEmailDoc.empty || !usernameDoc.empty) return toast.warn("Email or username already in use!");
                 const avatarUrl = profilePic.file ? await fileUpload(profilePic.file) : "";
                 const res = await createUserWithEmailAndPassword(auth, email, password);
                 await setDoc(doc(db, "users", res.user.uid), {
@@ -116,9 +116,24 @@ export default function Login() {
                     <label style={{ "cursor": "pointer" }} htmlFor="fileInput">Upload an image</label>
                 </div>
                 <input onChange={setProfilePicture} style={{ display: "none" }} id="fileInput" type="file" />
-                <input required type="text" name="username" placeholder="Username" />
+                <input required
+                    type="text"
+                    name="username"
+                    placeholder="Username"
+                    minlength="3"
+                    maxlength="15"
+                    pattern="^[a-zA-Z0-9_]+$"
+                    title="Username should be 3-15 characters long and contain only letters, numbers, and underscores."
+                />
                 <input required type="email" name="email" placeholder="Email" />
-                <input required type="password" name="password" placeholder="Password" />
+                <input required
+                    type="password"
+                    name="password"
+                    placeholder="Password"
+                    minlength="3"
+                    maxlength="15"
+                    pattern="^[a-zA-Z0-9_@]+$"
+                    title="Password should be 3-15 characters long and contain only letters, numbers, and underscores." />
                 {isLoading ? <Loading page={"login"} /> : <input className="btn" type="submit" value="Sign Up" />}
             </form>
         </div>
