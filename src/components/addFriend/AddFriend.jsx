@@ -7,7 +7,7 @@ import { useUserStore } from "../../lib/userStore";
 
 export default function AddFriend() {
     const [friend, setFriend] = useState(null);
-    const [currentUser] = useUserStore();
+    const currentUser = useUserStore.getState().currentUser;
     useEffect(() => {
         setFriend(null);
     }, [])

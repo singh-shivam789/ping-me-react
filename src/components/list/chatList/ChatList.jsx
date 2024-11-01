@@ -1,5 +1,6 @@
 import { doc, onSnapshot } from "firebase/firestore"
 import { useUserStore } from "../../../lib/userStore"
+import { useChatStore } from "../../../lib/chatStore"
 import AddFriend from "../../addFriend/AddFriend"
 import { useEffect, useState } from "react"
 import { db } from "../../../lib/firebase"
@@ -10,6 +11,7 @@ export default function ChatList() {
   const [addRemove, setAddRemove] = useState(false);
   const [currentUserChats, setCurrentUserChats] = useState([]);
   const { currentUser } = useUserStore();
+  const { modifyChat } = useChatStore;
   useEffect(() => {
     const unsub = onSnapshot(doc(db, "userchats", currentUser.id), async (currentUserChatDoc) => {
       //in all the chats, we also added the latest information of the friend using receiverId
@@ -25,6 +27,10 @@ export default function ChatList() {
     });
     return () => { unsub() };
   }, [currentUser.id]);
+
+  const handleChatClick = async (chat) => {
+    modifyChat(chat.chatId, chat.user)
+  }
   return (
     <div className="chatList">
       <div className="search">
@@ -35,7 +41,7 @@ export default function ChatList() {
         <img onClick={() => setAddRemove(prevState => !prevState)} className="addImg" src={addRemove ? "/minus.png" : "/plus.png"} alt="plus.png" />
       </div>
       <div className="chatItemContainer">
-        {currentUserChats.map((chat) => <ChatItem key={chat.id} data={chat} />)}
+        {currentUserChats.map((chat) => <ChatItem onClick={handleChatClick(chat)} key={chat.id} data={chat} />)}
       </div>
       {addRemove && <AddFriend />}
     </div>
