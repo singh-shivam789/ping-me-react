@@ -1,29 +1,29 @@
-import { useUserStore } from "../../lib/userStore";
+import { useUserStore } from "../../lib/stores/user/userStore";
 import UtilityIcons from "./UtilityIcons"
 import "./common.css"
-export default function UserInfo({ user }) {
-  const { currentUser } = useUserStore();
 
+export default function UserInfo({ whichUserPage }) {
+  const user = useUserStore.getState().user;
   return (
-    <div className={user === "chatTop" ? "userInfoChat" : user === "userDetail" ? "userDetailContainer" : "userInfoList"}>
+    <div className={whichUserPage === "chatTop" ? "userInfoChat" : whichUserPage === "userDetail" ? "userDetailContainer" : "userInfoList"}>
       <div className={
-        user === "chatTop" ? "userChat"
-          : user === "userDetail" ? "userDetail"
+        whichUserPage === "chatTop" ? "userChat"
+          : whichUserPage === "userDetail" ? "userDetail"
             : "userList"}
       >
-        <img src={currentUser.avatar || "/avatar.png"} />
+        <img src={user.pfp || "/avatar.png"} />
         {
-          user === "chatTop" || user === "userDetail" ? (
-            <div className={user == "userDetail" ? "userDetailNameStatus" : ""}>
-              {user == "userDetail" ? <h2>{currentUser.username}</h2> : <h3>{currentUser.username}</h3>}
-              <p className="userStatus">Lorem ipsum, dolor sit amet consectetur</p>
+          whichUserPage === "chatTop" || whichUserPage === "userDetail" ? (
+            <div className={whichUserPage === "userDetail" ? "userDetailNameStatus" : ""}>
+              {user == "userDetail" ? <h2>{user.username}</h2> : <h3>{user.username}</h3>}
+              <p className="userStatus">{user.status}</p>
             </div>
           ) : (
-            <h2>{currentUser.username}</h2>
+            <h2>{user.username}</h2>
           )
         }
       </div>
-      {user !== "userDetail" && <UtilityIcons user={user} />}
+      {whichUserPage !== "userDetail" && <UtilityIcons whichUserPage={whichUserPage} />}
     </div>
   )
 }

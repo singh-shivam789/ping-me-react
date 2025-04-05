@@ -1,23 +1,25 @@
-import { auth } from "../../lib/firebase";
-import UserInfo from "../common/UserInfo"
-import Options from "./options/Options"
-import "./detail.css"
+import { useUserStore } from "../../lib/stores/user/userStore";
+import { logoutUser } from "../../utils/userUtils";
+import UserInfo from "../common/UserInfo";
+import Options from "./options/Options";
 import { toast } from "react-toastify";
+import "./detail.css";
 
 export default function Detail() {
   const handleLogOut = async (e) => {
     try {
-      auth.signOut();
+      await logoutUser();      
+      useUserStore.setState({user: null, isLoading: false});
       toast.dark("Bye!");
     }
     catch (err) {
-      console.log(err);
+      console.log("Error", err.message);
       toast.error("Something went wrong!");
     }
   }
   return (
     <div className="detail">
-      <UserInfo user={"userDetail"} />
+      <UserInfo whichUserPage={"userDetail"} />
       <Options />
       <div className="logoutAndBlock">
         <div className="blockUser">

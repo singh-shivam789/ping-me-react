@@ -1,15 +1,15 @@
-export default function UtilityIcons({ user }) {
+export default function UtilityIcons({ whichUserPage }) {
     return (
-        <div className={user === "chatTop" || user === "chatBottom" ? "chatIcons" : "listIcons"}>
+        <div className={whichUserPage === "chatTop" || whichUserPage === "chatBottom" ? "chatIcons" : "listIcons"}>
             <img src={
-                user === "chatTop" ? "/phone.png"
-                    : user === "chatBottom" ? "/img.png"
+                whichUserPage === "chatTop" ? "/phone.png"
+                    : whichUserPage === "chatBottom" ? "/img.png"
                         : "/more.png"
             } />
-            <img src={user === "chatBottom" ? "/camera.png" : "/video.png"} />
+            <img src={whichUserPage === "chatBottom" ? "/camera.png" : "/video.png"} />
             <img src={
-                 user === "chatTop" ? "/info.png"
-                 : user === "chatBottom" ? "/mic.png"
+                 whichUserPage === "chatTop" ? "/info.png"
+                 : whichUserPage === "chatBottom" ? "/mic.png"
                      : "/edit.png"
             } />
         </div>

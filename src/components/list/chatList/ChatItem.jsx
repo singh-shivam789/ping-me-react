@@ -1,4 +1,4 @@
-export default function ChatItem({ chatData }) {
+export default function ChatItem({ chatData, user }) {
   return (
     <div className="chatItem">
       <img className="chatListUserImg" src={chatData.user.avatar || "/avatar.png"} alt="chatListUserImg.png" />

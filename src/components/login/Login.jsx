@@ -1,22 +1,12 @@
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
-import { setDoc, doc, collection, where, getDocs } from "firebase/firestore";
-import fileUpload from "../../lib/fileUpload";
-import { auth, db } from "../../lib/firebase";
-import { query } from "firebase/firestore";
+import Loading from "../common/Loading";
 import { toast } from "react-toastify";
 import { useState } from "react";
 import "./login.css"
-import Loading from "../common/Loading";
+import { createUserWithEmailAndPassword, getUserDocbyEmail, getUserDocbyUsername, signInWithEmailAndPassword } from "../../utils/userUtils";
+import { useUserStore } from "../../lib/stores/user/userStore";
 
 export default function Login() {
     const [isLoading, setIsLoading] = useState(false);
-    const errorHandler = (errMsg) => {
-        errMsg = errMsg.split('/')[1].split('-');
-        errMsg[0] = errMsg[0][0].toUpperCase() + errMsg[0].substring(1);
-        errMsg = errMsg.join(' ') + "."
-        return errMsg
-    };
-
     const [profilePic, setProfilePic] = useState({
         file: null,
         url: ""
@@ -29,50 +19,20 @@ export default function Login() {
             try {
                 const formData = new FormData(form);
                 const { email, password } = Object.fromEntries(formData);
-                await signInWithEmailAndPassword(auth, email, password)
-                form.reset();
-                toast.success("Successfully signed in!");
+                await signInWithEmailAndPassword(email, password).then(response => {
+                    form.reset();
+                    useUserStore.setState({
+                        user: response.data.user,
+                        isLoading: false
+                    })
+                    toast.success("Successfully signed in!");
+                }).catch(error => {
+                    console.log(error.stack);
+                    toast.error(error.message);
+                })
             } catch (err) {
-                console.log(err.code);
-                toast.error(errorHandler(err.code));
-            }
-        } else {
-            form.reportValidity();
-        }
-    }
-    const handleSignUp = async (e) => {
-        setIsLoading(true);
-        e.preventDefault();
-        const form = e.target;
-        if (form.checkValidity()) {
-            try {
-                const formData = new FormData(form);
-                const { email, password, username } = Object.fromEntries(formData);
-                const db_ref = collection(db, "users");
-                const userEmailQuery = query(db_ref, where("email", "==", email));
-                const userEmailDoc = await getDocs(userEmailQuery);
-                const usernameQuery = query(db_ref, where("username", "==", username));
-                const usernameDoc = await getDocs(usernameQuery);
-                if (!userEmailDoc.empty || !usernameDoc.empty) return toast.warn("Email or username already in use!");
-                const avatarUrl = profilePic.file ? await fileUpload(profilePic.file) : "";
-                const res = await createUserWithEmailAndPassword(auth, email, password);
-                await setDoc(doc(db, "users", res.user.uid), {
-                    username: username,
-                    email: email,
-                    avatar: avatarUrl,
-                    id: res.user.uid,
-                    blocked: []
-                });
-                await setDoc(doc(db, "userchats", res.user.uid), {
-                    chats: []
-                });
-                form.reset();
-                avatarUrl && toast.success("Successfully uploaded your profile picture!");
-                toast.success("Account successfully created! You can login now!");
-            }
-            catch (err) {
-                console.error("In catch", JSON.stringify(err));
-                toast.error(err.code ? errorHandler(err.code) : err.message);
+                console.log(err.stack);
+                toast.error("Something went wrong!");
             } finally {
                 setIsLoading(false);
             }
@@ -80,6 +40,41 @@ export default function Login() {
             form.reportValidity();
         }
     }
+
+    const handleSignUp = async (e) => {
+        setIsLoading(true);
+        e.preventDefault();
+        const form = e.target;
+        if (form.checkValidity()) {
+            try {
+                const formData = new FormData(form);
+                let userData = Object.fromEntries(formData);
+                userData = { ...userData, chats: [], friendRequests: [], friends: [], blocked: [], settings: [], status: "", pfp: "" };
+
+                await createUserWithEmailAndPassword(userData).then(response => {
+                    if (response.status === 400) {
+                        toast.warn(response.data.message);
+                    } else if (response.status === 409) {
+                        toast.warn("Email already in use!");
+                    } else {
+                        toast.success("Account successfully created! You can login now!");
+                    }
+                    form.reset();
+                }).catch(error => {
+                    console.log(error);
+                    throw new Error(error.message);
+                });
+            } catch (err) {
+                console.log(err.stack);
+                toast.error(err.message);
+            } finally {
+                setIsLoading(false);
+            }
+        } else {
+            form.reportValidity();
+        }
+    };
+
     const setProfilePicture = async (e) => {
         e.preventDefault();
         try {
@@ -97,7 +92,7 @@ export default function Login() {
                 })
             }
         } catch (err) {
-            console.log(err);
+            console.log(err.stack);
             toast.error("Error while uploading file!");
         }
     }

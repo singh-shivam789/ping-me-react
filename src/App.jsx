@@ -1,22 +1,29 @@
 import Notification from "./components/notification/Notification";
-import { onAuthStateChanged } from "firebase/auth";
 import Loading from "./components/common/Loading";
 import Detail from "./components/detail/Detail"
-import { useUserStore } from "./lib/userStore";
 import Login from "./components/login/Login";
 import List from "./components/list/List"
 import Chat from "./components/chat/Chat"
-import { auth } from "./lib/firebase";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { getUserValidationState } from "./utils/userUtils";
+import { useUserStore } from "./lib/stores/user/userStore";
 
 const App = () => {
-  const { currentUser, isLoading, fetchCurrentUserInfo } = useUserStore();
+  const currentUser = useUserStore((state) => state.user);
+  const isLoading = useUserStore((state) => state.isLoading);
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (userAuth) => {
-      fetchCurrentUserInfo(userAuth?.uid)
-    })
-    return () => { unsubscribe() };
-  }, [fetchCurrentUserInfo])
+    try {
+      const isCurrentUserValidated = getUserValidationState();
+      if (!isCurrentUserValidated) {
+        useUserStore.setState({ user: null, isLoading: false });
+      }
+      else{
+        console.log(currentUser)
+      }
+    } catch (error) {
+      console.log("Error", error.stack);
+    }
+  }, [])
 
   if (isLoading) return (<Loading page={"app"} />)
   else return (
