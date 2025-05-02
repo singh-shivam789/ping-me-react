@@ -1,78 +1,88 @@
-import { arrayUnion, collection, doc, getDocs, query, serverTimestamp, setDoc, updateDoc, where } from "firebase/firestore";
-import { useEffect, useState } from "react";
-import { db } from "../../lib/firebase";
+import { getUserDocbyIdentifier, sendFriendRequest } from "../../utils/userUtils";
+import { useUserStore } from "../../lib/stores/user/userStore";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import "./addFriend.css"
-import { useUserStore } from "../../lib/userStore";
 
-export default function AddFriend() {
-    const [friend, setFriend] = useState(null);
-    const currentUser = useUserStore.getState().currentUser;
+export default function AddFriend({ setAddFriendRef }) {
+    const addFriendRef = useRef(null);
+    const currentUser = useUserStore((state) => state.user);
+    const currentUserSearchHistory = useUserStore((state) => state.searchHistory);
+    const lastSearched = useUserStore((state) => state.lastSearched);
+    const setLastSearched = useUserStore((state) => state.setLastSearched);
+    const addToSearchHistory = useUserStore((state) => state.addToSearchHistory);
+    const removeFromSearchHistory = useUserStore((state) => state.removeFromSearchHistory);
     useEffect(() => {
-        setFriend(null);
+        setAddFriendRef(addFriendRef);
     }, [])
-    const handleSearch = async (e) => {
-        e.preventDefault();
-        const formData = new FormData(e.target);
-        const friendUsername = formData.get("username");
-        const friendRef = collection(db, "users");
-        const friendQuery = query(friendRef, where("username", "==", friendUsername));
-        const querySnapshot = await getDocs(friendQuery);
-        if (!querySnapshot.empty) {
-            setFriend(querySnapshot.docs[0].data());
-            toast.success("Found!");
-        }
-        else {
-            toast.warn("Could not find any user with this username, Try Again!");
-            setFriend(null);
+
+    const addFriendHandler = async (e) => {
+        try {
+            const friendEmail = e.target.getAttribute("data-email");
+            const isAlreadyFriend = e.target.getAttribute("data-is-already-friend");
+            if (isAlreadyFriend === "true") {
+                toast.warn("Already a friend!");
+                return;
+            } else {
+                let response = await sendFriendRequest(friendEmail, currentUser._id);
+                const updatedUser = response.data.user;
+                useUserStore.setState({ user: updatedUser });
+                toast.info("Friend request sent!");
+                toast.info("You will be notified if they accept your request");
+                return;
+            }
+        } catch (error) {
+            console.log(error);
+            return;
         }
     }
-    const addFriendHandler = async () => {
-        const chatCollectionRef = collection(db, "chats");
-        const userChatRef = collection(db, "userchats");
+    
+    const handleSearch = async (e) => {
         try {
-            const newChatDocRef = doc(chatCollectionRef)
-            await setDoc(newChatDocRef, {
-                createdAt: serverTimestamp(),
-                messages: [],
-                id: newChatDocRef.id
-            });
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const friendEmail = Object.fromEntries(formData).email;
+            const friend = await getUserDocbyIdentifier("email", friendEmail);
+            if (friendEmail === currentUser.email) return;
+            if (!friend || !friend._id || !friend.username) {
+                toast.error("User not found or invalid data.");
+                return;
+            }
 
-            await updateDoc(doc(userChatRef, friend.id), {
-                chats: arrayUnion({
-                    chatId: newChatDocRef.id,
-                    receiverId: currentUser.id,
-                    lastMessage: "",
-                    updatedAt: Date.now(),
-                })
-            });
-
-            await updateDoc(doc(userChatRef, currentUser.id), {
-                chats: arrayUnion({
-                    chatId: newChatDocRef.id,
-                    receiverId: friend.id,
-                    lastMessage: "",
-                    updatedAt: Date.now(),
-                })
-            });
-
-        } catch (err) {
+            if (!lastSearched || lastSearched !== friend.email) addToSearchHistory(friend);
+            setLastSearched(friend.email);
+        }
+        catch (err) {
+            toast.error(err);
             console.log(err);
         }
     }
+
+    const removeFromListHandler = (e) => {
+        const friendEmail = e.target.getAttribute("data-email");
+        removeFromSearchHistory(friendEmail);   
+    }
+
     return (
-        <div className="addFriend">
+        <div ref={addFriendRef} className="addFriend">
             <form className="addFriendForm" onSubmit={handleSearch}>
-                <input name="username" className="addFriendSearchBar" type="text" placeholder="Enter username..." />
+                <input name="email" className="addFriendSearchBar" type="email" placeholder="Enter email..." />
                 <input className="friendSearchBtn" type="submit" value="Search" />
             </form>
-            {friend && <div className="friend">
-                <div className="friendInfo">
-                    <img src={friend.avatar || "/avatar.png"} alt="" />
-                    <span>{friend.username}</span>
-                </div>
-                <button onClick={addFriendHandler}>Add Friend</button>
-            </div>}
+            {(
+                currentUserSearchHistory.map((user) => {
+                    const isAlreadyFriend = currentUser.friends.some((email) => email === user.email);
+                    const hasSentFriendRequestEarlier = currentUser.friendRequests.sent.some((email) => email === user.email);
+                    return (<div className="friend" key={user._id}>
+                        <div className="friendInfo">
+                            <img src={user.pfp || "/avatar.png"} alt="" />
+                            <span>{user.username}</span>
+                        </div>
+                        <button disabled={hasSentFriendRequestEarlier} id={user._id} data-email={user.email} onClick={addFriendHandler} data-is-already-friend={isAlreadyFriend}>Add Friend</button>
+                        <button id={user._id} data-email={user.email} onClick={removeFromListHandler}>x</button>
+                    </div>)
+                })
+            )}
         </div>
     )
 }

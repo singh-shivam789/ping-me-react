@@ -1,12 +1,14 @@
-import Loading from "../common/Loading";
+import Loading from "../shared/Loading";
 import { toast } from "react-toastify";
 import { useState } from "react";
 import "./login.css"
-import { createUserWithEmailAndPassword, getUserDocbyEmail, getUserDocbyUsername, signInWithEmailAndPassword } from "../../utils/userUtils";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "../../utils/userUtils";
 import { useUserStore } from "../../lib/stores/user/userStore";
+import ForgotPassword from "../forgotPassword/ForgotPassword";
 
 export default function Login() {
     const [isLoading, setIsLoading] = useState(false);
+    const [forgotPassword, setForgotPassword] = useState(false);
     const [profilePic, setProfilePic] = useState({
         file: null,
         url: ""
@@ -19,7 +21,7 @@ export default function Login() {
             try {
                 const formData = new FormData(form);
                 const { email, password } = Object.fromEntries(formData);
-                await signInWithEmailAndPassword(email, password).then(response => {
+                signInWithEmailAndPassword(email, password).then(response => {
                     form.reset();
                     useUserStore.setState({
                         user: response.data.user,
@@ -49,9 +51,14 @@ export default function Login() {
             try {
                 const formData = new FormData(form);
                 let userData = Object.fromEntries(formData);
-                userData = { ...userData, chats: [], friendRequests: [], friends: [], blocked: [], settings: [], status: "", pfp: "" };
+                userData = {
+                    ...userData, chats: [], friendRequests: {
+                        sent: [],
+                        received: []
+                    }, friends: [], blocked: [], settings: [], status: "", pfp: ""
+                };
 
-                await createUserWithEmailAndPassword(userData).then(response => {
+                createUserWithEmailAndPassword(userData).then(response => {
                     if (response.status === 400) {
                         toast.warn(response.data.message);
                     } else if (response.status === 409) {
@@ -75,6 +82,11 @@ export default function Login() {
         }
     };
 
+    const handleForgotPassword = async (e) => {
+        setForgotPassword((prev) => !prev);
+        //TODO: For later
+    }
+
     const setProfilePicture = async (e) => {
         e.preventDefault();
         try {
@@ -97,7 +109,7 @@ export default function Login() {
         }
     }
     return (
-        <div className="login">
+        (forgotPassword ? <ForgotPassword /> : (<div className="login">
             <form className="signin" onSubmit={handleSignIn}>
                 <h1>Welcome back</h1>
                 <input required type="email" name="email" placeholder="Email" />
@@ -131,6 +143,6 @@ export default function Login() {
                     title="Password should be 3-15 characters long and contain only letters, numbers, and underscores." />
                 {isLoading ? <Loading page={"login"} /> : <input className="btn" type="submit" value="Sign Up" />}
             </form>
-        </div>
+        </div>))
     )
 }

@@ -1,9 +1,5 @@
-import { doc, onSnapshot } from "firebase/firestore";
 import { useEffect, useRef, useState } from "react"
-import { db } from "../../lib/firebase"
-import { useChatStore } from "../../lib/chatStore";
 export default function ChatContainer() {
-  const 
   const msgScrollRef = useRef(null);
   const [chat, setChat] = useState()
   useEffect(() => {
@@ -17,10 +13,6 @@ export default function ChatContainer() {
   }, []);
 
   useEffect(() => {
-    const unSub = onSnapshot(doc(db, "chats", chatId), (res) => {
-      setChat(res.data())
-    });
-    return () => { unSub() };
   }, [])
   return (
     <div className="chatContainer">

@@ -58,7 +58,7 @@
 
 .chatIcons {
     display: flex;
-    width: 12%;
+    width: 13%;
     justify-content: space-between;
 }
 
@@ -69,6 +69,40 @@
 }
 
 .chatIcons>img:hover {
+    cursor: pointer;
+    color: darkgray;
+}
+
+.detailIcons {
+    display: flex;
+    width: 12%;
+    justify-content: space-between;
+}
+
+.detailIcons>img {
+    width: 20px;
+    height: 20px;
+    transition: color 0.3s ease-in !important;
+}
+
+.detailIcons>img:hover {
+    cursor: pointer;
+    color: darkgray;
+}
+
+.chatBottomIcons {
+    display: flex;
+    width: 12%;
+    justify-content: space-between;
+}
+
+.chatBottomIcons>img {
+    width: 20px;
+    height: 20px;
+    transition: color 0.3s ease-in !important;
+}
+
+.chatBottomIcons>img:hover {
     cursor: pointer;
     color: darkgray;
 }

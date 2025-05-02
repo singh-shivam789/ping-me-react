@@ -1,9 +1,13 @@
-import { memo, useState } from "react";
-import UtilityIcons from "../common/UtilityIcons"
+import useOnClickOutside from "../../hooks/useOnClickOutside";
+import UtilityIcons from "../shared/UtilityIcons"
+import { memo, useRef, useState } from "react";
 import EmojiPicker from "emoji-picker-react";
+
 const ChatBottom = () => {
+  const emojiPickerRef = useRef(null);
+  const toggleButtonRef = useRef(null);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-  const [inputText, setInputText] = useState("")
+  const [inputText, setInputText] = useState("");
   const emojiClickHandler = (event) => {
     setInputText((prevState) => prevState + event.emoji);
   }
@@ -12,15 +16,16 @@ const ChatBottom = () => {
     setInputText(event.target.value)
   }
 
+  useOnClickOutside(emojiPickerRef, toggleButtonRef, setShowEmojiPicker, showEmojiPicker);
   return (
     <div className="chatBottom">
-      <UtilityIcons user="chatBottom" />
+      <UtilityIcons whichUserPage="chatBottom" />
       <div className="typeBar">
         <input type="text" onChange={inputTextHandler} value={inputText} placeholder="Type a message..." />
       </div>
       <div className="emojiSend">
-        <img onClick={() => { setShowEmojiPicker(prevState => !prevState) }} className="emoji" src="/emoji.png" alt="emoji.png" />
-        <div className="emojiPickerContainer">
+        <img ref={toggleButtonRef} onClick={() => { setShowEmojiPicker(prevState => !prevState) }} className="emoji" src="/emoji.png" alt="emoji.png" />
+        <div ref={emojiPickerRef} className="emojiPickerContainer">
           <EmojiPicker open={showEmojiPicker} onEmojiClick={emojiClickHandler} className="emojiPicker" />
         </div>
         <button className="sendButton">Send</button>

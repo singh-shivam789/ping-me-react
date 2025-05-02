@@ -1,36 +1,43 @@
-import { doc, onSnapshot } from "firebase/firestore"
-import { useUserStore } from "../../../lib/userStore"
-import { useChatStore } from "../../../lib/chatStore"
+import { useUserStore } from "../../../lib/stores/user/userStore";
+import useOnClickOutside from "../../../hooks/useOnClickOutside";
+import { useEffect, useRef, useState } from "react"
 import AddFriend from "../../addFriend/AddFriend"
-import { useEffect, useState } from "react"
-import { db } from "../../../lib/firebase"
 import ChatItem from "./ChatItem"
+import axios from "axios";
 import "./chatList.css"
 
 export default function ChatList() {
+  const [searchInput, setSearchInput] = useState("");
   const [addRemove, setAddRemove] = useState(false);
-  const [currentUserChats, setCurrentUserChats] = useState([]);
-  const { currentUser } = useUserStore();
-  const { modifyChat } = useChatStore;
+  //    //dummy values, will be fixed when chatStore will be developed
+  const [currentUserChats, setCurrentUserChats] = useState([{
+    chatId: 1,
+    chatData: {
+      user: {
+        email: "subam@gmail.com",
+        username: "subam"
+      },
+      lastMessage: "Helloo!"
+    }
+  },
+{
+    chatId: 2,
+    chatData: {
+      user: {
+        email: "lelepeda@gmail.com",
+        username: "lele"
+      },
+      lastMessage: "Hi!"
+    }
+  }]);
+  const currentUser = useUserStore.getState().user;
+  const [addFriendRef, setAddFriendRef] = useState(null);
+  const toggleButtonRef = useRef(null);
   useEffect(() => {
-    const unsub = onSnapshot(doc(db, "userchats", currentUser.id), async (currentUserChatDoc) => {
-      //in all the chats, we also added the latest information of the friend using receiverId
-      const allChats = currentUserChatDoc.data().chats;
-      const promises = allChats.map(async (chat) => {
-        const friendRef = doc(db, "users", chat.receiverId);
-        const friendSnap = await getDoc(friendRef);
-        const friendData = friendSnap.data();
-        return { ...chat, friendData };
-      });
-      const updatedChats = await Promise.all(promises);
-      setCurrentUserChats(updatedChats.sort((a, b) => a.updatedAt - b.updatedAt));
-    });
-    return () => { unsub() };
-  }, [currentUser.id]);
+  }, [addFriendRef]);
 
-  const handleChatClick = async (chat) => {
-    modifyChat(chat.chatId, chat.user)
-  }
+  useOnClickOutside(toggleButtonRef, addFriendRef, setAddRemove, addRemove)
+
   return (
     <div className="chatList">
       <div className="search">
@@ -38,12 +45,13 @@ export default function ChatList() {
           <img className="searchImg" src="/search.png" alt="search.png" />
           <input type="text" placeholder="Search" />
         </div>
-        <img onClick={() => setAddRemove(prevState => !prevState)} className="addImg" src={addRemove ? "/minus.png" : "/plus.png"} alt="plus.png" />
+        <img ref={toggleButtonRef} onClick={() => setAddRemove(prevState => !prevState)} className="addImg" src={addRemove ? "/minus.png" : "/plus.png"} alt="plus.png" />
       </div>
       <div className="chatItemContainer">
-        {currentUserChats.map((chat) => <ChatItem onClick={handleChatClick(chat)} key={chat.id} data={chat} />)}
+        {currentUserChats.map((chat) => <ChatItem key={chat.chatId} user={chat.chatData.user} 
+        lastMessage ={chat.chatData.lastMessage}/>)}
       </div>
-      {addRemove && <AddFriend />}
+      {addRemove && <AddFriend setAddFriendRef={setAddFriendRef} />}
     </div>
   )
 }

@@ -36,6 +36,7 @@
         }
 
         .btn {
+            text-align: center;
             background-color: whitesmoke;
             color: darkslategrey;
         }

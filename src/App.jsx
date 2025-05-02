@@ -1,11 +1,11 @@
 import Notification from "./components/notification/Notification";
-import Loading from "./components/common/Loading";
+import Loading from "./components/shared/Loading";
 import Detail from "./components/detail/Detail"
 import Login from "./components/login/Login";
 import List from "./components/list/List"
 import Chat from "./components/chat/Chat"
 import { useEffect, useState } from "react";
-import { getUserValidationState } from "./utils/userUtils";
+import { getInitialUserState, getUserValidationState } from "./utils/userUtils";
 import { useUserStore } from "./lib/stores/user/userStore";
 
 const App = () => {
@@ -13,13 +13,14 @@ const App = () => {
   const isLoading = useUserStore((state) => state.isLoading);
   useEffect(() => {
     try {
-      const isCurrentUserValidated = getUserValidationState();
-      if (!isCurrentUserValidated) {
-        useUserStore.setState({ user: null, isLoading: false });
-      }
-      else{
-        console.log(currentUser)
-      }
+      getUserValidationState().then(status => {
+        if(!status){
+          useUserStore.persist.clearStorage();
+          useUserStore.setState(getInitialUserState());
+        }
+      }).catch((err) => {
+        console.log(err);
+      });
     } catch (error) {
       console.log("Error", error.stack);
     }

@@ -1,6 +1,6 @@
 import { useUserStore } from "../../lib/stores/user/userStore";
-import { logoutUser } from "../../utils/userUtils";
-import UserInfo from "../common/UserInfo";
+import { getInitialUserState, logoutUser } from "../../utils/userUtils";
+import UserInfo from "../shared//UserInfo";
 import Options from "./options/Options";
 import { toast } from "react-toastify";
 import "./detail.css";
@@ -8,8 +8,9 @@ import "./detail.css";
 export default function Detail() {
   const handleLogOut = async (e) => {
     try {
-      await logoutUser();      
-      useUserStore.setState({user: null, isLoading: false});
+      await logoutUser();
+      useUserStore.persist.clearStorage();
+      useUserStore.setState(getInitialUserState());
       toast.dark("Bye!");
     }
     catch (err) {
@@ -19,7 +20,10 @@ export default function Detail() {
   }
   return (
     <div className="detail">
-      <UserInfo whichUserPage={"userDetail"} />
+      {    
+        //useStore user is dummy value, will be added when chatStore will be developed
+      }
+      <UserInfo whichUserPage={"userDetail"} user={useUserStore.getState().user} />
       <Options />
       <div className="logoutAndBlock">
         <div className="blockUser">

@@ -1,0 +1,86 @@
+#notification-icon>img {
+    width: 20px;
+    height: 20px;
+}
+
+#notification-icon>img:hover {
+    cursor: pointer;
+}
+
+#notification-icon {
+    position: relative;
+    display: block;
+}
+
+.notification-dot {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 10px;
+    height: 10px;
+    background-color: rgb(251, 0, 0);
+    border-radius: 50%;
+}
+
+.notification-dot:hover{
+    cursor: pointer;
+}
+
+.notifications{
+    border: 1px solid black;
+    width: 25vw;
+    max-height: 50vh;
+    overflow-y: auto; 
+    padding: 25px 20px;
+    background-color: rgba(69, 95, 99, 0.6);
+    -webkit-backdrop-filter: blur(15px) brightness(0.5) saturate(120%);
+    backdrop-filter: blur(20px) brightness(0.5) saturate(200%);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    color: whitesmoke;
+    position: absolute;
+    top: 15%;
+    left: 35%;
+    z-index: 2;
+    gap: 30px;
+}
+
+.notification{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 15px;
+
+    .notificationBtns{
+        width: 15%;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .notificationBtn{
+        padding: 5px;
+        border-radius: 2px;
+        border: none;
+        cursor: pointer;
+    }
+
+    .userInfo{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        .notificationUserImg{
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: none;
+        }
+    }   
+
+    .notificationMessage{
+        .notificationUserName{
+            font-weight: bolder;
+        }
+    }
+}

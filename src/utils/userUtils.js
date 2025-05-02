@@ -1,103 +1,135 @@
 import axios from "axios";
 
-function getUserDocbyIdentifier(identifier, identifierValue) {
+export async function getUserDocbyIdentifier(identifier, identifierValue) {
     try {
-        axios.get(`http://localhost:3000/user?${identifier}=${identifierValue[identifier]}`,
-            { withCredentials: true }).then(response => {
-                if (response.status >= 500) {
-                    throw new Error(response.data.message);
-                }
-                else return response.data;
-            }).catch(error => {
-                throw new Error(error.message);
-            });
+        const response = await axios.get(`http://localhost:3000/user?${identifier}=${identifierValue}`,
+            {
+                withCredentials: true
+            }
+        );
+        return response.data.user;
     } catch (error) {
-        console.log("Error while fetching user");
         throw new Error(error.message);
     }
-
-    return axios.get(`http://localhost:3000/user?${identifier}=${identifierValue[identifier]}`, { withCredentials: true },
-        {
-            validateStatus: (status) => status >= 200 && status < 500
-
-        }).then(response => {
-            return response;
-        }).catch(error => {
-            const errorMessage = error.response?.data?.message
-                || error.message
-                || 'Unknown signup error';
-            console.error("Signup failed:", errorMessage);
-            throw new Error(errorMessage);
-        });
-}
-
-export function getUserDocbyEmail(userData) {
-    return getUserDocbyIdentifier("email", userData);
-}
-
-export function getUserDocbyUsername(userData) {
-    return getUserDocbyIdentifier("username", userData);
 }
 
 export async function createUserWithEmailAndPassword(userData) {
-    return axios.post(`http://localhost:3000/user/signup`, userData,
-        {
-            withCredentials: true
-        }, {
-        validateStatus: (status) => status >= 200 && status < 500
-    }).then(response => {
-        return response;
-    }).catch(error => {
+    try {
+        return await axios.post(`http://localhost:3000/user/signup`, userData,
+            {
+                withCredentials: true
+            }
+        )
+    } catch (error) {
         const errorMessage = error.response?.data?.message
             || error.message
             || 'Unknown signup error';
-        console.error("Signup failed:", errorMessage);
         throw new Error(errorMessage);
-    });
+    }
 }
 
 
 export async function signInWithEmailAndPassword(email, password) {
-    return axios.post(`http://localhost:3000/user/signin`, { email, password },
-        { withCredentials: true }, {
-        validateStatus: (status) => status >= 200 && status < 500
-    }).then(response => {
-        return response;
-    }).catch(error => {
+    try {
+        return await axios.post(`http://localhost:3000/user/signin`, { email, password },
+            {
+                withCredentials: true
+            }
+        )
+    } catch (error) {
         const errorMessage = error.response?.data?.message
             || error.message
             || 'Unknown signin error';
-        console.error("Signin failed:", errorMessage);
         throw new Error(errorMessage);
-    });
+    }
 }
 
 export async function getUserValidationState() {
-    return axios.get(`http://localhost:3000/user/validate`,
-        { withCredentials: true }, {
-        validateStatus: (status) => status >= 200 && status < 500
-    }).then(response => {
-        return response;
-    }).catch(error => {
+    try {
+        const response = await axios.get(`http://localhost:3000/user/validate`,
+            {
+                withCredentials: true
+            });
+        return response.data.isUserValidated === true;
+    }
+    catch (error) {
         const errorMessage = error.response?.data?.message
             || error.message
             || 'Cannot verify user status';
-        console.error("Verification failed:", errorMessage);
         throw new Error(errorMessage);
-    });
+    }
 }
 
 export async function logoutUser() {
-    return axios.post("http://localhost:3000/user/signout", {},
-        { withCredentials: true }, {
-        validateStatus: (status) => status >= 200 && status < 500
-    }).then(response => {
-        return response;
-    }).catch(error => {
+    try {
+        return await axios.post("http://localhost:3000/user/signout", {},
+            {
+                withCredentials: true
+            });
+
+    } catch (error) {
         const errorMessage = error.response?.data?.message
             || error.message
             || 'Error while signing out.';
-        console.error("Error while siging out", errorMessage);
         throw new Error(errorMessage);
-    });
+    }
+}
+
+export async function sendFriendRequest(friendEmail, userId) {
+    try {
+        return await axios.post("http://localhost:3000/user/friendRequest", {
+            id: userId,
+            friendEmail: friendEmail
+        }, {
+            withCredentials: true
+        })
+    } catch (error) {
+        const errorMessage = error.response?.data?.message
+            || error.message
+            || 'Error while sending friend request';
+        throw new Error(errorMessage);
+    }
+}
+
+export async function decideFriendRequestStatus(friendEmail, userId, friendRequestDecision) {
+    try {
+        const response = await axios.patch("http://localhost:3000/user/friendRequest", {
+            id: userId,
+            friendEmail: friendEmail,
+            friendRequestDecision: friendRequestDecision
+        }, {
+            withCredentials: true
+        });
+
+        return response.data;
+    } catch (error) {
+        const errorMessage = error.response?.data?.message
+            || error.message
+            || 'Error while updating friend request';
+        throw new Error(errorMessage);
+    }
+}
+
+export async function getAllUsersWithMatchingEmails(emails) {
+    try {
+        const response = await axios.post("http://localhost:3000/users/by-email", { emails: [...emails] }, {
+            withCredentials: true
+        });
+        return response.data.users;
+    } catch (error) {
+        const errorMessage = error.response?.data?.message
+            || error.message
+            || 'Error while getting all the users with matching Ids';
+        throw new Error(errorMessage);
+    }
+}
+
+export function getInitialUserState() {
+    return {
+        isLoading: false,
+        user: null,
+        lastSearched: null,
+        searchHistory: [],
+        chats: []
+    }
 }
