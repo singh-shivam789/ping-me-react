@@ -143,10 +143,13 @@ export async function getAllUsersWithMatchingEmails(emails) {
 
 export function getInitialUserState() {
     return {
-        isLoading: false,
         user: null,
+        chats: [],
         lastSearched: null,
         searchHistory: [],
-        chats: []
+        notificationsVisible: false,
+        friendRequestUsers: [],
+        notificationBellActive: false,
+        userFriends: [],
     }
 }

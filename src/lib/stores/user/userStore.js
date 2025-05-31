@@ -4,11 +4,58 @@ import { create } from "zustand";
 const useUserStore = create(
     persist((set) => {
         return {
-            isLoading: false,
             user: null,
             chats: [],
             lastSearched: null,
             searchHistory: [],
+            notificationsVisible: false,
+            friendRequestUsers: [],
+            notificationBellActive: false,
+            userFriends: [],
+            setUserFriends: (friends) => {
+                set((state) => ({
+                    userFriends: [...friends]
+                }))
+            },
+            addToUserFriends: (friend) => {
+                set((state) => {
+                    const doesExist = state.userFriends.some((frUser) => frUser.email === friend.email);
+                    if(!doesExist) return {
+                        userFriends: [...state.userFriends, friend]
+                    }
+                    else return {}
+
+                })
+            },
+            setNotificationBellActive: (isActive) => {
+                set((state) => ({
+                    notificationBellActive: isActive
+                }))
+            },
+            setFriendRequestUsers: (users) => {
+                set((state) => ({
+                    friendRequestUsers: [...users]
+                }))
+            },
+            addToFriendRequestUsers: (user) => {
+                set((state) => {
+                   const doesExist = state.friendRequestUsers.some((frUser) => frUser.email === user.email);
+                    if(!doesExist) return {
+                        friendRequestUsers: [...state.friendRequestUsers, user]
+                    }
+                    else return {}
+                })
+            },
+            removeFriendRequestUser: (user) => {
+                set((state) => ({
+                    friendRequestUsers: state.friendRequestUsers.filter((frUser) => frUser.email !== user.email)
+                }))
+            },
+            setNotificationsVisible: () => {
+                set((state) => ({
+                    notificationsVisible: !state.notificationsVisible
+                }))
+            },
             setUser: (signedInUser) => {
                 set((state) => ({
                     user: signedInUser

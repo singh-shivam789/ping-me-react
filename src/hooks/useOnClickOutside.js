@@ -3,10 +3,10 @@ const useOnClickOutside = (toggleButtonRef, ref, handler, clicked) => {
     function clickEventHandler(event){
         if(clicked){
             if(toggleButtonRef.current == event.target || toggleButtonRef.current.contains(event.target)){
-                handler(prev => !prev);
+                handler();
             }
             if(!ref.current.contains(event.target)){
-                handler(prev => !prev);
+                handler();
             }
        }
      }

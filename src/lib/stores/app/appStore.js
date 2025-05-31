@@ -5,6 +5,18 @@ const useAppStore = create(
     persist((set) => {
         return {
             allUsers:[],
+            isAddFriendSearchVisible: false,
+            showEmojiPicker: false,
+            setShowEmojiPicker: () => {
+                set((state) => ({
+                    showEmojiPicker: !state.showEmojiPicker
+                }))
+            },
+            setIsAddFriendSearchVisible: () => {
+                set((state) => ({
+                    isAddFriendSearchVisible: !state.isAddFriendSearchVisible
+                }))
+            },
             setUsers: (users) => {
                 set((state) => ({
                     allUsers: [...users]

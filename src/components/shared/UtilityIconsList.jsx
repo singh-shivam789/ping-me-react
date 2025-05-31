@@ -14,9 +14,14 @@ export default function UtilityIconsList() {
   const setUser = useUserStore(state => state.setUser);
   const addNewUser = useAppStore((state) => state.addNewUser);
 
-  const [notificationsVisible, handleNotificationsVisible] = useState(false);
   const [isNotificationBellActive, setIsNotificationBellActive] = useState(false);
-  const [friendRequestsUsers, setFriendRequestUsers] = useState([]);
+  const notificationsVisible = useUserStore((state) => state.notificationsVisible);
+  const friendRequestUsers = useUserStore((state) => state.friendRequestUsers);
+  const setNotificationsVisible = useUserStore((state) => state.setNotificationsVisible);
+  const setFriendRequestUsers = useUserStore((state) => state.setFriendRequestUsers);
+  const addToFriendRequestUsers = useUserStore((state) => state.addToFriendRequestUsers);
+  const removeFriendRequestUser = useUserStore((state) => state.removeFriendRequestUser);
+  
   const toggleButtonRef = useRef(null);
   const notificationsRef = useRef(null);
 
@@ -24,13 +29,18 @@ export default function UtilityIconsList() {
   const [isSocketActive, setIsSocketActive] = useState(false);
 
   const socketNotificationHandler = (data) => {
-    setFriendRequestUsers((state) => [...state, data.sentFrom]);
+    addToFriendRequestUsers(data.sentFrom);
     setUser(data.to);
     setIsNotificationBellActive(true);
   }
   const socketNewUserHandler = (data) => {
     addNewUser(data.newUser);
   }
+  
+  // const socketFriendRequestStatusHandler = (data) => {
+
+  // }
+
   useEffect(() => {
     if (socket != null) {
       setIsSocketActive(true);
@@ -41,24 +51,24 @@ export default function UtilityIconsList() {
     if (isSocketActive) {
       if (currentUser !== null) {
         socket.on("friend-request-received", socketNotificationHandler);
-        socket.on("user-registered", socketNewUserHandler)
-
+        socket.on("user-registered", socketNewUserHandler);
+        // socket.on("friend-request-status-changed", socketFriendRequestStatusHandler)
       }
     }
     else return;
     return () => {
-      socket.off("friend-request-received", socketNotificationHandler)
-      socket.off("user-registered", socketNewUserHandler)
-
+      socket.off("friend-request-received", socketNotificationHandler);
+      socket.off("user-registered", socketNewUserHandler);
+      // socket.off("friend-request-status-changed", socketFriendRequestStatusHandler);
     }
-  }, [socket, isSocketActive])
+  }, [socket, isSocketActive]);
 
   const handleNotifications = (e) => {
-    handleNotificationsVisible((state) => (!state));
+    setNotificationsVisible();
     setIsNotificationBellActive(false);
   }
 
-  useOnClickOutside(toggleButtonRef, notificationsRef, handleNotificationsVisible, notificationsVisible)
+  useOnClickOutside(toggleButtonRef, notificationsRef, setNotificationsVisible, notificationsVisible)
   useEffect(() => {
     if (currentUser.friendRequests.received.length == 0) {
       setIsNotificationBellActive(false);
@@ -81,7 +91,7 @@ export default function UtilityIconsList() {
         {isNotificationBellActive && <span className="notification-dot"></span>}
       </div>
 
-      {notificationsVisible && <Notifications notificationsRef={notificationsRef} friendRequestsUsers={friendRequestsUsers} />}
+      {notificationsVisible && <Notifications notificationsRef={notificationsRef} friendRequestsUsers={friendRequestUsers} />}
     </div>
   );
 }

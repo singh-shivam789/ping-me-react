@@ -6,9 +6,9 @@ import { useState } from "react";
 import "./login.css"
 
 export default function Login() {
-    const [isLoading, setIsLoading] = useState(false);
     const [forgotPassword, setForgotPassword] = useState(false);
     const setUser = useUserStore(state => state.setUser);
+    const setUserFriends = useUserStore(state => state.setUserFriends);
     const [profilePic, setProfilePic] = useState({
         file: null,
         url: ""
@@ -24,6 +24,7 @@ export default function Login() {
                 signInWithEmailAndPassword(email, password).then(response => {
                     form.reset();
                     setUser(response.data.user);
+                    setUserFriends(response.data.friends);
                     toast.success("Successfully signed in!");
                 }).catch(error => {
                     console.log(error.stack);
@@ -32,8 +33,6 @@ export default function Login() {
             } catch (err) {
                 console.log(err.stack);
                 toast.error("Something went wrong!");
-            } finally {
-                setIsLoading(false);
             }
         } else {
             form.reportValidity();
@@ -41,7 +40,6 @@ export default function Login() {
     }
 
     const handleSignUp = async (e) => {
-        setIsLoading(true);
         e.preventDefault();
         const form = e.target;
         if (form.checkValidity()) {
@@ -71,8 +69,6 @@ export default function Login() {
             } catch (err) {
                 console.log(err.stack);
                 toast.error(err.message);
-            } finally {
-                setIsLoading(false);
             }
         } else {
             form.reportValidity();

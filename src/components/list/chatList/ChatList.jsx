@@ -5,10 +5,12 @@ import AddFriend from "../../addFriend/AddFriend"
 import ChatItem from "./ChatItem"
 import axios from "axios";
 import "./chatList.css"
+import useAppStore from "../../../lib/stores/app/appStore";
 
 export default function ChatList() {
   const [searchInput, setSearchInput] = useState("");
-  const [addRemove, setAddRemove] = useState(false);
+  const isAddFriendSearchVisible = useAppStore((state) => state.isAddFriendSearchVisible);
+  const setIsAddFriendSearchVisible = useAppStore((state) => state.setIsAddFriendSearchVisible);
   //    //dummy values, will be fixed when chatStore will be developed
   const [currentUserChats, setCurrentUserChats] = useState([{
     chatId: 1,
@@ -36,7 +38,7 @@ export default function ChatList() {
   useEffect(() => {
   }, [addFriendRef]);
 
-  useOnClickOutside(toggleButtonRef, addFriendRef, setAddRemove, addRemove)
+  useOnClickOutside(toggleButtonRef, addFriendRef, setIsAddFriendSearchVisible, isAddFriendSearchVisible)
 
   return (
     <div className="chatList">
@@ -45,13 +47,13 @@ export default function ChatList() {
           <img className="searchImg" src="/search.png" alt="search.png" />
           <input type="text" placeholder="Search" />
         </div>
-        <img ref={toggleButtonRef} onClick={() => setAddRemove(prevState => !prevState)} className="addImg" src={addRemove ? "/minus.png" : "/plus.png"} alt="plus.png" />
+        <img ref={toggleButtonRef} onClick={() => setIsAddFriendSearchVisible()} className="addImg" src={isAddFriendSearchVisible ? "/minus.png" : "/plus.png"} alt="plus.png" />
       </div>
       <div className="chatItemContainer">
         {currentUserChats.map((chat) => <ChatItem key={chat.chatId} user={chat.chatData.user} 
         lastMessage ={chat.chatData.lastMessage}/>)}
       </div>
-      {addRemove && <AddFriend setAddFriendRef={setAddFriendRef} />}
+      {isAddFriendSearchVisible && <AddFriend setAddFriendRef={setAddFriendRef} />}
     </div>
   )
 }
