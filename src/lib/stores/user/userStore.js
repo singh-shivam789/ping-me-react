@@ -1,6 +1,7 @@
-import { create } from "zustand";
 import { persist } from "zustand/middleware";
-export const useUserStore = create(
+import { create } from "zustand";
+
+const useUserStore = create(
     persist((set) => {
         return {
             isLoading: false,
@@ -8,6 +9,11 @@ export const useUserStore = create(
             chats: [],
             lastSearched: null,
             searchHistory: [],
+            setUser: (signedInUser) => {
+                set((state) => ({
+                    user: signedInUser
+                }))
+            },
             addToSearchHistory: (search) => {
                 set((state) => ({
                     searchHistory: [...state.searchHistory, search]
@@ -22,6 +28,17 @@ export const useUserStore = create(
                 set((state) => ({
                     lastSearched: search
                 }))
+            },
+            addFriendRequest: (email) => {
+                set((state) => ({
+                    user: {
+                        ...state.user,
+                        friendRequests: {
+                            ...state.user.friendRequests,
+                            sent: [...state.user.friendRequests.sent, email]
+                        }
+                    }
+                }))
             }
         }
     }, {
@@ -30,3 +47,4 @@ export const useUserStore = create(
     })
 );
 
+export default useUserStore;

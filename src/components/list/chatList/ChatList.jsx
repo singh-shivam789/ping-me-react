@@ -1,4 +1,4 @@
-import { useUserStore } from "../../../lib/stores/user/userStore";
+import useUserStore from "../../../lib/stores/user/userStore";
 import useOnClickOutside from "../../../hooks/useOnClickOutside";
 import { useEffect, useRef, useState } from "react"
 import AddFriend from "../../addFriend/AddFriend"

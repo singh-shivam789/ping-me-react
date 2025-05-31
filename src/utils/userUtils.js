@@ -4,7 +4,10 @@ export async function getUserDocbyIdentifier(identifier, identifierValue) {
     try {
         const response = await axios.get(`http://localhost:3000/user?${identifier}=${identifierValue}`,
             {
-                withCredentials: true
+                withCredentials: true,
+                validateStatus: function (status) {
+                    return status < 500
+                }
             }
         );
         return response.data.user;
@@ -17,7 +20,10 @@ export async function createUserWithEmailAndPassword(userData) {
     try {
         return await axios.post(`http://localhost:3000/user/signup`, userData,
             {
-                withCredentials: true
+                withCredentials: true,
+                validateStatus: function (status) {
+                    return status < 500
+                }
             }
         )
     } catch (error) {
@@ -27,7 +33,6 @@ export async function createUserWithEmailAndPassword(userData) {
         throw new Error(errorMessage);
     }
 }
-
 
 export async function signInWithEmailAndPassword(email, password) {
     try {
@@ -48,9 +53,12 @@ export async function getUserValidationState() {
     try {
         const response = await axios.get(`http://localhost:3000/user/validate`,
             {
-                withCredentials: true
+                withCredentials: true,
+                validateStatus: function (status) {
+                    return status < 500
+                }
             });
-        return response.data.isUserValidated === true;
+        return response.data.isUserValidated;
     }
     catch (error) {
         const errorMessage = error.response?.data?.message
@@ -64,7 +72,10 @@ export async function logoutUser() {
     try {
         return await axios.post("http://localhost:3000/user/signout", {},
             {
-                withCredentials: true
+                withCredentials: true,
+                validateStatus: function (status) {
+                    return status < 500
+                }
             });
 
     } catch (error) {
@@ -98,7 +109,10 @@ export async function decideFriendRequestStatus(friendEmail, userId, friendReque
             friendEmail: friendEmail,
             friendRequestDecision: friendRequestDecision
         }, {
-            withCredentials: true
+            withCredentials: true,
+            validateStatus: function (status) {
+                return status < 500
+            }
         });
 
         return response.data;
@@ -113,7 +127,10 @@ export async function decideFriendRequestStatus(friendEmail, userId, friendReque
 export async function getAllUsersWithMatchingEmails(emails) {
     try {
         const response = await axios.post("http://localhost:3000/users/by-email", { emails: [...emails] }, {
-            withCredentials: true
+            withCredentials: true,
+            validateStatus: function (status) {
+                return status < 500
+            }
         });
         return response.data.users;
     } catch (error) {

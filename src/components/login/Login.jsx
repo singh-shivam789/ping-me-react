@@ -1,14 +1,14 @@
-import Loading from "../shared/Loading";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "../../utils/userUtils";
+import ForgotPassword from "../forgotPassword/ForgotPassword";
+import useUserStore from "../../lib/stores/user/userStore";
 import { toast } from "react-toastify";
 import { useState } from "react";
 import "./login.css"
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "../../utils/userUtils";
-import { useUserStore } from "../../lib/stores/user/userStore";
-import ForgotPassword from "../forgotPassword/ForgotPassword";
 
 export default function Login() {
     const [isLoading, setIsLoading] = useState(false);
     const [forgotPassword, setForgotPassword] = useState(false);
+    const setUser = useUserStore(state => state.setUser);
     const [profilePic, setProfilePic] = useState({
         file: null,
         url: ""
@@ -23,10 +23,7 @@ export default function Login() {
                 const { email, password } = Object.fromEntries(formData);
                 signInWithEmailAndPassword(email, password).then(response => {
                     form.reset();
-                    useUserStore.setState({
-                        user: response.data.user,
-                        isLoading: false
-                    })
+                    setUser(response.data.user);
                     toast.success("Successfully signed in!");
                 }).catch(error => {
                     console.log(error.stack);
@@ -114,7 +111,7 @@ export default function Login() {
                 <h1>Welcome back</h1>
                 <input required type="email" name="email" placeholder="Email" />
                 <input required type="password" name="password" placeholder="Password" />
-                {isLoading ? <Loading page={"login"} /> : <input className="btn" type="submit" value="Sign In" />}
+                <input className="btn" type="submit" value="Sign In" />
             </form>
             <form className="signup" onSubmit={handleSignUp}>
                 <h1>Create Account</h1>
@@ -141,7 +138,7 @@ export default function Login() {
                     maxLength="15"
                     pattern="^[a-zA-Z0-9_@]+$"
                     title="Password should be 3-15 characters long and contain only letters, numbers, and underscores." />
-                {isLoading ? <Loading page={"login"} /> : <input className="btn" type="submit" value="Sign Up" />}
+                <input className="btn" type="submit" value="Sign Up" />
             </form>
         </div>))
     )

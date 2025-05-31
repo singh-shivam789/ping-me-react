@@ -1,14 +1,13 @@
 import { decideFriendRequestStatus } from '../../../utils/userUtils'
-import { useUserStore } from "../../../lib/stores/user/userStore";
+import useUserStore from "../../../lib/stores/user/userStore";
 import React from 'react'
 
 export default function Notification({ user }) {
-  const currentUser = useUserStore.getState().user; 
+  const currentUser = useUserStore(state => state.user);
+  const setUser = useUserStore(state => state.setUser); 
   const handleFriendRequestReject = () => {
       decideFriendRequestStatus(user.email, currentUser._id, "reject").then((res) => {
-        useUserStore.setState((state) => ({
-            "user": res.user
-          }));
+          setUser(res.user);
       }).catch(err => {
         console.log(err);
       })
@@ -16,9 +15,7 @@ export default function Notification({ user }) {
 
   const handleFriendRequestAccept = () => {
     decideFriendRequestStatus(user.email, currentUser._id, "accept").then((res) => {
-      useUserStore.setState((state) => ({
-        "user": res.user
-      }));
+      setUser(res.user);
     }).catch(err => {
       console.log(err);
     })

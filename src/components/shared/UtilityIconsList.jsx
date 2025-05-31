@@ -1,18 +1,58 @@
 import { getAllUsersWithMatchingEmails } from '../../utils/userUtils.js';
-import { useUserStore } from '../../lib/stores/user/userStore.js'
+import { useSocketContext } from '../../hooks/useSocketContext.js';
 import useOnClickOutside from '../..//hooks/useOnClickOutside.js';
 import Notifications from '../list/notifications/Notifications';
+import useUserStore from '../../lib/stores/user/userStore.js'
+import useAppStore from '../../lib/stores/app/appStore.js';
 import React, { useState, useRef, useEffect } from 'react';
 import { toast } from "react-toastify";
 import "./common.css";
 
 export default function UtilityIconsList() {
-  const currentUser = useUserStore.getState().user;
+
+  const currentUser = useUserStore(state => state.user);
+  const setUser = useUserStore(state => state.setUser);
+  const addNewUser = useAppStore((state) => state.addNewUser);
+
   const [notificationsVisible, handleNotificationsVisible] = useState(false);
   const [isNotificationBellActive, setIsNotificationBellActive] = useState(false);
   const [friendRequestsUsers, setFriendRequestUsers] = useState([]);
   const toggleButtonRef = useRef(null);
   const notificationsRef = useRef(null);
+
+  const socket = useSocketContext();
+  const [isSocketActive, setIsSocketActive] = useState(false);
+
+  const socketNotificationHandler = (data) => {
+    setFriendRequestUsers((state) => [...state, data.sentFrom]);
+    setUser(data.to);
+    setIsNotificationBellActive(true);
+  }
+  const socketNewUserHandler = (data) => {
+    addNewUser(data.newUser);
+  }
+  useEffect(() => {
+    if (socket != null) {
+      setIsSocketActive(true);
+    }
+  }, [socket]);
+
+  useEffect(() => {
+    if (isSocketActive) {
+      if (currentUser !== null) {
+        socket.on("friend-request-received", socketNotificationHandler);
+        socket.on("user-registered", socketNewUserHandler)
+
+      }
+    }
+    else return;
+    return () => {
+      socket.off("friend-request-received", socketNotificationHandler)
+      socket.off("user-registered", socketNewUserHandler)
+
+    }
+  }, [socket, isSocketActive])
+
   const handleNotifications = (e) => {
     handleNotificationsVisible((state) => (!state));
     setIsNotificationBellActive(false);
@@ -20,15 +60,14 @@ export default function UtilityIconsList() {
 
   useOnClickOutside(toggleButtonRef, notificationsRef, handleNotificationsVisible, notificationsVisible)
   useEffect(() => {
+    if (currentUser.friendRequests.received.length == 0) {
+      setIsNotificationBellActive(false);
+    } else {
+      setIsNotificationBellActive(true);
+      toast.info("You have new notifications!");
+    }
     getAllUsersWithMatchingEmails(currentUser.friendRequests.received).then((users) => {
       setFriendRequestUsers(users);
-      if(!users.length){
-        setIsNotificationBellActive(false);
-      }
-      else{
-        setIsNotificationBellActive(true);
-        toast.info("You have new notifications!");
-      }
     }).catch((error) => {
       console.log(error);
     })
@@ -37,8 +76,8 @@ export default function UtilityIconsList() {
     <div className="listIcons">
       <img src="/more.png" alt="More" />
       <img src="/edit.png" alt="Edit" />
-      <div  id="notification-icon">
-        <img ref={toggleButtonRef} onClick={handleNotifications} id='notification-bell' src="/notification-bell.png" alt="Notifications" />
+      <div onClick={handleNotifications} id="notification-icon">
+        <img ref={toggleButtonRef} id='notification-bell' src="/notification-bell.png" alt="Notifications" />
         {isNotificationBellActive && <span className="notification-dot"></span>}
       </div>
 

@@ -1,4 +1,4 @@
-import { useUserStore } from "../../lib/stores/user/userStore"
+import useUserStore from "../../lib/stores/user/userStore"
 import UserInfo from "../shared//UserInfo"
 import ChatList from "./chatList/ChatList"
 import "./notifications.css"

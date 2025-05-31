@@ -1,17 +1,21 @@
-import { getUserDocbyIdentifier, sendFriendRequest } from "../../utils/userUtils";
-import { useUserStore } from "../../lib/stores/user/userStore";
-import { useEffect, useRef, useState } from "react";
+import { sendFriendRequest } from "../../utils/userUtils";
+import useUserStore from "../../lib/stores/user/userStore";
+import useAppStore from "../../lib/stores/app/appStore";
+import { useEffect, useRef } from "react";
 import { toast } from "react-toastify";
-import "./addFriend.css"
+import "./addFriend.css";
 
 export default function AddFriend({ setAddFriendRef }) {
     const addFriendRef = useRef(null);
     const currentUser = useUserStore((state) => state.user);
+    const allUsers = useAppStore((state) => state.allUsers);
+    const removeFromSearchHistory = useUserStore((state) => state.removeFromSearchHistory);
     const currentUserSearchHistory = useUserStore((state) => state.searchHistory);
     const lastSearched = useUserStore((state) => state.lastSearched);
     const setLastSearched = useUserStore((state) => state.setLastSearched);
     const addToSearchHistory = useUserStore((state) => state.addToSearchHistory);
-    const removeFromSearchHistory = useUserStore((state) => state.removeFromSearchHistory);
+    const addFriendRequest = useUserStore((state) => state.addFriendRequest);
+
     useEffect(() => {
         setAddFriendRef(addFriendRef);
     }, [])
@@ -24,33 +28,37 @@ export default function AddFriend({ setAddFriendRef }) {
                 toast.warn("Already a friend!");
                 return;
             } else {
-                let response = await sendFriendRequest(friendEmail, currentUser._id);
-                const updatedUser = response.data.user;
-                useUserStore.setState({ user: updatedUser });
+                addFriendRequest(friendEmail);
+                await sendFriendRequest(friendEmail, currentUser._id);
                 toast.info("Friend request sent!");
                 toast.info("You will be notified if they accept your request");
                 return;
             }
         } catch (error) {
+            toast.error("Error while sending friend request");
             console.log(error);
             return;
         }
     }
-    
+
+    const getUser = (friendEmail) => {
+        return allUsers.find((user) => user.email === friendEmail);
+    }
+
     const handleSearch = async (e) => {
         try {
             e.preventDefault();
             const formData = new FormData(e.target);
             const friendEmail = Object.fromEntries(formData).email;
-            const friend = await getUserDocbyIdentifier("email", friendEmail);
+            const friend = getUser(friendEmail);
             if (friendEmail === currentUser.email) return;
-            if (!friend || !friend._id || !friend.username) {
-                toast.error("User not found or invalid data.");
+            if (!friend) {
+                toast.error("User not found or invalid email.");
                 return;
             }
 
-            if (!lastSearched || lastSearched !== friend.email) addToSearchHistory(friend);
-            setLastSearched(friend.email);
+            if (!lastSearched || lastSearched !== friendEmail) addToSearchHistory(friend);
+            setLastSearched(friendEmail);
         }
         catch (err) {
             toast.error(err);
@@ -60,7 +68,8 @@ export default function AddFriend({ setAddFriendRef }) {
 
     const removeFromListHandler = (e) => {
         const friendEmail = e.target.getAttribute("data-email");
-        removeFromSearchHistory(friendEmail);   
+        removeFromSearchHistory(friendEmail);
+        setLastSearched("");
     }
 
     return (

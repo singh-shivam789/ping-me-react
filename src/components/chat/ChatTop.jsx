@@ -1,5 +1,5 @@
  
-import { useUserStore } from "../../lib/stores/user/userStore"
+import useUserStore from "../../lib/stores/user/userStore"
 import UserInfo from "../shared//UserInfo"
 export default function ChatTop() {
   return (

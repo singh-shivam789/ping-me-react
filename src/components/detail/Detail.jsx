@@ -1,5 +1,7 @@
-import { useUserStore } from "../../lib/stores/user/userStore";
 import { getInitialUserState, logoutUser } from "../../utils/userUtils";
+import useUserStore from "../../lib/stores/user/userStore";
+import { getInitialAppState } from "../../utils/appUtils";
+import useAppStore from "../../lib/stores/app/appStore";
 import UserInfo from "../shared//UserInfo";
 import Options from "./options/Options";
 import { toast } from "react-toastify";
@@ -11,6 +13,8 @@ export default function Detail() {
       await logoutUser();
       useUserStore.persist.clearStorage();
       useUserStore.setState(getInitialUserState());
+      useAppStore.persist.clearStorage();
+      useAppStore.setState(getInitialAppState());
       toast.dark("Bye!");
     }
     catch (err) {

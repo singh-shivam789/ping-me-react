@@ -1,8 +1,10 @@
-import React from "react"
+import { SocketProvider } from "./components/socket/SocketContext"
 import ReactDOM from "react-dom/client"
-import App from "./App.jsx"
+import App from "./App"
 import "./index.css"
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <App />,
-)
+  <SocketProvider>
+    <App />
+  </SocketProvider>
+);
