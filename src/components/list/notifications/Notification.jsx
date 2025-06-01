@@ -3,23 +3,34 @@ import useUserStore from "../../../lib/stores/user/userStore";
 import React from 'react'
 
 export default function Notification({ user }) {
+  const removeFriendRequestUser = useUserStore((state) => state.removeFriendRequestUser);
   const currentUser = useUserStore(state => state.user);
-  const setUser = useUserStore(state => state.setUser); 
+  const setUser = useUserStore(state => state.setUser);
+  const addToUserFriends = useUserStore(state => state.addToUserFriends);
+
   const handleFriendRequestReject = () => {
-      decideFriendRequestStatus(user.email, currentUser._id, "reject").then((res) => {
-          setUser(res.user);
-      }).catch(err => {
-        console.log(err);
-      })
+    decideFriendRequestStatus(user.email, currentUser._id, "reject").then((res) => {
+      setUser(res.user);
+      removeFriendRequestUser(user);
+    }).catch(err => {
+      console.log(err);
+    })
   }
 
   const handleFriendRequestAccept = () => {
     decideFriendRequestStatus(user.email, currentUser._id, "accept").then((res) => {
       setUser(res.user);
+      removeFriendRequestUser(user);
+      addToUserFriends({
+        _id: user._id,
+        username: user.username,
+        email: user.email,
+        pfp: user.pfp
+      });
     }).catch(err => {
       console.log(err);
     })
-}
+  }
 
 
   return (
@@ -32,8 +43,8 @@ export default function Notification({ user }) {
         </span>
       </div>
       <div className='notificationBtns'>
-      <button onClick={handleFriendRequestAccept} className='notificationBtn' type="submit">Accept</button>
-      <button onClick={handleFriendRequestReject} className='notificationBtn' type="submit">x</button>    
+        <button onClick={handleFriendRequestAccept} className='notificationBtn' type="submit">Accept</button>
+        <button onClick={handleFriendRequestReject} className='notificationBtn' type="submit">x</button>
       </div>
     </div>
   )

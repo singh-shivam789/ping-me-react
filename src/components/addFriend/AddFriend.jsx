@@ -1,20 +1,69 @@
-import { sendFriendRequest } from "../../utils/userUtils";
+import { useSocketContext } from '../../hooks/useSocketContext.js';
 import useUserStore from "../../lib/stores/user/userStore";
+import { sendFriendRequest } from "../../utils/userUtils";
 import useAppStore from "../../lib/stores/app/appStore";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import "./addFriend.css";
 
 export default function AddFriend({ setAddFriendRef }) {
     const addFriendRef = useRef(null);
+    const setUser = useUserStore(state => state.setUser);
     const currentUser = useUserStore((state) => state.user);
     const allUsers = useAppStore((state) => state.allUsers);
+
     const removeFromSearchHistory = useUserStore((state) => state.removeFromSearchHistory);
     const currentUserSearchHistory = useUserStore((state) => state.searchHistory);
-    const lastSearched = useUserStore((state) => state.lastSearched);
-    const setLastSearched = useUserStore((state) => state.setLastSearched);
     const addToSearchHistory = useUserStore((state) => state.addToSearchHistory);
     const addFriendRequest = useUserStore((state) => state.addFriendRequest);
+    const setLastSearched = useUserStore((state) => state.setLastSearched);
+    const addToUserFriends = useUserStore(state => state.addToUserFriends);
+    const lastSearched = useUserStore((state) => state.lastSearched);
+
+    const socket = useSocketContext();
+    const [isSocketActive, setIsSocketActive] = useState(false);
+
+    const socketFriendRequestStatusHandler = (data) => {
+        try {
+            const friendRequestDecision = data.friendRequestStatus;
+            const sentFrom = data.sentFrom;
+            const updatedUser = data.to;
+            setUser(updatedUser);
+            if (friendRequestDecision === "accept") {
+                addToUserFriends({
+                    _id: sentFrom._id,
+                    username: sentFrom.username,
+                    email: sentFrom.email,
+                    pfp: sentFrom.pfp
+                });
+                toast.info(`${sentFrom.username} accepted your friend request`);
+                toast.info(`You can search them by their username and initiate a chat!`);
+            }
+            removeFromSearchHistory(sentFrom.email);
+        } 
+        catch(error){
+            console.log("Error", error.message);
+        }
+    }
+
+    useEffect(() => {
+        if (socket != null) {
+            setIsSocketActive(true);
+        }
+    }, [socket]);
+
+    useEffect(() => {
+        if (isSocketActive) {
+            if (currentUser !== null) {
+                socket.on("friend-request-status-changed", socketFriendRequestStatusHandler)
+            }
+        }
+        else return;
+        return () => {
+            socket.off("friend-request-status-changed", socketFriendRequestStatusHandler);
+        }
+    }, [socket, isSocketActive]);
+
 
     useEffect(() => {
         setAddFriendRef(addFriendRef);

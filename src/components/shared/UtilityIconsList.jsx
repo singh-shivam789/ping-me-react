@@ -20,7 +20,6 @@ export default function UtilityIconsList() {
   const setNotificationsVisible = useUserStore((state) => state.setNotificationsVisible);
   const setFriendRequestUsers = useUserStore((state) => state.setFriendRequestUsers);
   const addToFriendRequestUsers = useUserStore((state) => state.addToFriendRequestUsers);
-  const removeFriendRequestUser = useUserStore((state) => state.removeFriendRequestUser);
   
   const toggleButtonRef = useRef(null);
   const notificationsRef = useRef(null);
@@ -36,10 +35,6 @@ export default function UtilityIconsList() {
   const socketNewUserHandler = (data) => {
     addNewUser(data.newUser);
   }
-  
-  // const socketFriendRequestStatusHandler = (data) => {
-
-  // }
 
   useEffect(() => {
     if (socket != null) {
@@ -52,14 +47,12 @@ export default function UtilityIconsList() {
       if (currentUser !== null) {
         socket.on("friend-request-received", socketNotificationHandler);
         socket.on("user-registered", socketNewUserHandler);
-        // socket.on("friend-request-status-changed", socketFriendRequestStatusHandler)
       }
     }
     else return;
     return () => {
       socket.off("friend-request-received", socketNotificationHandler);
       socket.off("user-registered", socketNewUserHandler);
-      // socket.off("friend-request-status-changed", socketFriendRequestStatusHandler);
     }
   }, [socket, isSocketActive]);
 

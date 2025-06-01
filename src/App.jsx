@@ -12,13 +12,15 @@ import Chat from "./components/chat/Chat";
 const App = () => {
   const currentUser = useUserStore((state) => state.user);
   const setUsers = useAppStore((state) => state.setUsers);
-  
+
   useEffect(() => {
     try {
       getUserValidationState().then(status => {
         if (!status) {
           useUserStore.persist.clearStorage();
           useUserStore.setState(getInitialUserState());
+          useAppStore.persist.clearStorage();
+          useAppStore.setState(getInitialAppState());
         }
       }).catch((error) => {
         throw new Error(error.message);
@@ -33,7 +35,7 @@ const App = () => {
       console.log("Error", error.stack);
     }
   }, [currentUser])
-  
+
   return (
     <div className="container">
       {currentUser ? (<>
