@@ -1,8 +1,13 @@
 .list {
     height: 100%;
-    flex: 1;
+    flex: 0.9;
     border-right: 1.5px solid rgb(245, 245, 245, 0.35);
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     overflow-y: hidden;
+    .listHeader{
+        padding: 5px 20px;
+        margin-top: auto;
+    }
 }
