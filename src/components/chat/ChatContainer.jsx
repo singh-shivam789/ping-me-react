@@ -1,7 +1,20 @@
+import { useSocketContext } from "../../hooks/useSocketContext";
+import useUserStore from "../../lib/stores/user/userStore";
 import { useEffect, useRef, useState } from "react"
+import Message from "./Message";
+import moment from "moment";
+
 export default function ChatContainer() {
   const msgScrollRef = useRef(null);
-  const [chat, setChat] = useState()
+  const [chatMessages, setChatMessages] = useState([]);
+  const socket = useSocketContext();
+  const [isSocketActive, setIsSocketActive] = useState(false);
+  const currentUser = useUserStore((state) => state.user);
+
+  const handleMessageSent = (data) => {
+    console.log(data);
+  }
+
   useEffect(() => {
     if (msgScrollRef.current) {
       setTimeout(function () {
@@ -13,48 +26,52 @@ export default function ChatContainer() {
   }, []);
 
   useEffect(() => {
+    if (socket != null) {
+      setIsSocketActive(true);
+    }
+  }, [socket]);
+  useEffect(() => {
   }, [])
+
+  useEffect(() => {
+    if (isSocketActive) {
+      if (currentUser !== null) {
+        socket.on("message-sent", handleMessageSent)
+      }
+    }
+    else return;
+    return () => {
+      socket.off("message-sent", handleMessageSent);
+    }
+  }, [socket, isSocketActive]);
+
+  useEffect(() => {
+    setChatMessages([
+      {
+        styleClass: "theirs",
+        user: currentUser,
+        text: "Hey from user1",
+        messageTime: moment().startOf('hour').fromNow(),
+        media: ""
+      },
+      {
+        styleClass: "ours",
+        user: {
+          ...currentUser,
+          _id: 2
+        },
+        text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto blanditiis maxime eius sequi, reprehenderit soluta illum officia pariatur nisi, sunt exercitationem dignissimos error. Maiores exercitationem temporibus, mollitia nam voluptatem dolorem!",
+        messageTime: moment().startOf('day').fromNow(),
+        media: ""
+      },
+    ])
+  }, []);
+
   return (
     <div className="chatContainer">
-      <div className="message theirs">
-        <img src="/avatar.png" alt="user.png" className="avatar" />
-        <div className="messageContainer">
-          <div className="text">
-            <p>
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-              Laudantium itaque, iure modi totam voluptas expedita tempore iste est eum repellat voluptatem.
-              Obcaecati placeat ut ab soluta asperiores rerum veritatis dolor?
-            </p>
-          </div>
-          <span className="messageTime">1 min ago</span>
-        </div>
-      </div>
-      <div className="message ours">
-        <img className="messageImage" src="https://w0.peakpx.com/wallpaper/371/259/HD-wallpaper-forza-forza-horizon-4-car.jpg" alt="" />
-        <div className="text">
-          <p>
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-            Laudantium itaque, iure modi totam voluptas expedita tempore iste est eum repellat voluptatem.
-            Obcaecati placeat ut ab soluta asperiores rerum veritatis dolor?
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Non aliquid vero perspiciatis accusantium doloribus consequatur, minus nulla a quod nam ab, dolores officiis, iste quos quo! Sapiente laudantium illum dolor!
-          </p>
-        </div>
-        <span className="messageTime">1 min ago</span>
-      </div>
-      <div className="message theirs">
-        <img src="/avatar.png" alt="user.png" className="avatar" />
-        <div className="messageContainer">
-          <img className="messageImage" src="https://wallpapercat.com/w/full/f/3/d/2214-3840x2160-desktop-4k-forza-horizon-wallpaper-image.jpg" alt="" />
-          <div className="text">
-            <p>
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-              Laudantium itaque, iure modi totam voluptas expedita tempore iste est eum repellat voluptatem.
-              Obcaecati placeat ut ab soluta asperiores rerum veritatis dolor?
-            </p>
-          </div>
-          <span className="messageTime">1 min ago</span>
-        </div>
-      </div>
+      {chatMessages.map((message) => {
+        return (<Message key={message.user._id} message={message}/>)
+      })}
       <div ref={msgScrollRef} className="scroll"></div>
     </div>
   )
