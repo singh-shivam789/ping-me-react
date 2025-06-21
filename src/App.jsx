@@ -5,14 +5,13 @@ import useUserStore from "./lib/stores/user/userStore";
 import useAppStore from "./lib/stores/app/appStore";
 import Detail from "./components/detail/Detail"
 import Login from "./components/login/Login";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import List from "./components/list/List";
 import Chat from "./components/chat/Chat";
 
 const App = () => {
   const currentUser = useUserStore((state) => state.user);
   const setUsers = useAppStore((state) => state.setUsers);
-
   useEffect(() => {
     try {
       getUserValidationState().then(status => {
