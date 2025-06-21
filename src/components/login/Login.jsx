@@ -1,6 +1,9 @@
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "../../utils/userUtils";
 import ForgotPassword from "../forgotPassword/ForgotPassword";
+import useChatStore from "../../lib/stores/user/chatStore";
 import useUserStore from "../../lib/stores/user/userStore";
+import { getAllUserChats } from "../../utils/chatUtils";
+import useAppStore from "../../lib/stores/app/appStore";
 import { toast } from "react-toastify";
 import { useState } from "react";
 import "./login.css"
@@ -9,6 +12,9 @@ export default function Login() {
     const [forgotPassword, setForgotPassword] = useState(false);
     const setUser = useUserStore(state => state.setUser);
     const setUserFriends = useUserStore(state => state.setUserFriends);
+    const setChats = useChatStore(state => state.setChats);
+    const setChatUser = useChatStore(state => state.setChatUser);
+    const addNewUser = useAppStore((state) => state.addNewUser);
     const [profilePic, setProfilePic] = useState({
         file: null,
         url: ""
@@ -23,8 +29,28 @@ export default function Login() {
                 const { email, password } = Object.fromEntries(formData);
                 signInWithEmailAndPassword(email, password).then(response => {
                     form.reset();
-                    setUser(response.data.user);
-                    setUserFriends(response.data.friends);
+                    const currentUser = response.data.user;
+                    const currentUserFriends = response.data.friends;
+                    getAllUserChats(response.data.user._id).then((response) => {
+                        response.chats.forEach((chat) => {
+                            if (chat.isSelfChat) {
+                                chat.user = currentUser;
+                            }
+                            else {
+                                const friendId = chat.participants.find((id) => id !== currentUser._id);
+                                chat.user = useAppStore.getState().allUsers.find((user) => user._id === friendId);
+                            }
+                        })
+                        let selfChat = response.chats.find((chat) => chat.isSelfChat === true);
+                        let otherChats = response.chats.filter((chat) => chat.isSelfChat !== true);
+                        const orderedChats = [selfChat, ...otherChats];
+                        setChats(orderedChats);
+                        setChatUser(orderedChats[0].user);
+                        setUserFriends(currentUserFriends);
+                        setUser(currentUser);
+                    }).catch(error => {
+                        throw new Error(error.message);
+                    })
                     toast.success("Successfully signed in!");
                 }).catch(error => {
                     console.log(error.stack);
@@ -60,6 +86,7 @@ export default function Login() {
                         toast.warn("Email already in use!");
                     } else {
                         toast.success("Account successfully created! You can login now!");
+                        addNewUser(response.data.newUser);
                     }
                     form.reset();
                 }).catch(error => {
