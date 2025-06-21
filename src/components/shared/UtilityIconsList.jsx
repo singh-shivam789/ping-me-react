@@ -77,8 +77,6 @@ export default function UtilityIconsList() {
   }, [currentUser]);
   return (
     <div className="listIcons">
-      <img src="/more.png" alt="More" />
-      <img src="/edit.png" alt="Edit" />
       <div onClick={handleNotifications} id="notification-icon">
         <img ref={toggleButtonRef} id='notification-bell' src="/notification-bell.png" alt="Notifications" />
         {isNotificationBellActive && <span className="notification-dot"></span>}
