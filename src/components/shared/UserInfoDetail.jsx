@@ -2,17 +2,15 @@ import "./common.css"
 import React from 'react'
 
 export default function UserInfoDetail({user}) {
-    const { username, pfp } = user;
-
     return (
         <div className="userDetailContainer">
-            <div className="userDetail">
-                <img src={pfp || "/avatar.png"} alt="Profile" />
+            {user && <div className="userDetail">
+                <img src={user.pfp || "/avatar.png"} alt="Profile" />
                 <div className="userDetailNameStatus">
-                    <h2>{username}</h2>
-                    <p className="userStatus">{status}</p>
+                    <h2>{user.username}</h2>
+                    <p className="userStatus">{user.status}</p>
                 </div>
-            </div>
+            </div>}
         </div>
     )
 }
