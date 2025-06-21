@@ -1,25 +1,40 @@
-import { create } from "zustand";
 import { persist } from "zustand/middleware";
-export const useChatStore = create(
+import { create } from "zustand";
+
+const useChatStore = create(
     persist((set) => {
         return {
-            user: null,
-            lastSearched: null,
-            searchHistory: [],
-            addToSearchHistory: (search) => {
+            chatUser: null,
+            chats: [],
+            setChats: (chats) => {
                 set((state) => ({
-                    searchHistory: [...state.searchHistory, search]
+                    chats: chats
                 }))
             },
-            setLastSearched: (search) => {
+            setChatUser: (user) => {
                 set((state) => ({
-                    lastSearched: search
+                    chatUser: user
                 }))
+            },
+            removeFromChats: (chatToRemove) => {
+                set((state) => ({
+                    chats: state.chats.filter((chat) => chat._id !== chatToRemove._id)
+                }));
+            },
+            addToChats: (newChat) => {
+                set((state) => {
+                    const isChatAlreadyPresent = state.chats.some((chat) => chat._id === newChat._id);
+                    if (isChatAlreadyPresent) return {};
+                    else return {
+                        chats: [...state.chats, newChat]
+                    }
+                })
             }
         }
     }, {
-        name: 'userStore',
+        name: 'chatStore',
         getStorage: () => localStorage
     })
 );
 
+export default useChatStore;
