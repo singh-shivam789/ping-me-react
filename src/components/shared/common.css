@@ -1,8 +1,7 @@
-.userInfoList {
-    padding: 20px;
-    display: flex;
+.userNotifications {
+    padding: 10px;
     align-items: center;
-    justify-content: space-between;
+    display: inline;
 }
 
 .userList {
@@ -36,6 +35,7 @@
 }
 
 .userInfoChat {
+    min-height: 12%;
     padding: 20px;
     display: flex;
     align-items: center;

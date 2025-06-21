@@ -1,8 +1,8 @@
 import { useSocketContext } from '../../hooks/useSocketContext.js';
+import { useEffect, useRef, useState } from "react";
 import useUserStore from "../../lib/stores/user/userStore";
 import { sendFriendRequest } from "../../utils/userUtils";
 import useAppStore from "../../lib/stores/app/appStore";
-import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import "./addFriend.css";
 
@@ -11,7 +11,6 @@ export default function AddFriend({ setAddFriendRef }) {
     const setUser = useUserStore(state => state.setUser);
     const currentUser = useUserStore((state) => state.user);
     const allUsers = useAppStore((state) => state.allUsers);
-
     const removeFromSearchHistory = useUserStore((state) => state.removeFromSearchHistory);
     const currentUserSearchHistory = useUserStore((state) => state.searchHistory);
     const addToSearchHistory = useUserStore((state) => state.addToSearchHistory);
