@@ -1,8 +1,9 @@
 import { useSocketContext } from '../../hooks/useSocketContext.js';
-import { useEffect, useRef, useState } from "react";
+import useChatStore from '../../lib/stores/user/chatStore.js';
 import useUserStore from "../../lib/stores/user/userStore";
 import { sendFriendRequest } from "../../utils/userUtils";
 import useAppStore from "../../lib/stores/app/appStore";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import "./addFriend.css";
 
@@ -18,6 +19,7 @@ export default function AddFriend({ setAddFriendRef }) {
     const setLastSearched = useUserStore((state) => state.setLastSearched);
     const addToUserFriends = useUserStore(state => state.addToUserFriends);
     const lastSearched = useUserStore((state) => state.lastSearched);
+    const addToChats = useChatStore((state) => state.addToChats);
 
     const socket = useSocketContext();
     const [isSocketActive, setIsSocketActive] = useState(false);
@@ -27,6 +29,7 @@ export default function AddFriend({ setAddFriendRef }) {
             const friendRequestDecision = data.friendRequestStatus;
             const sentFrom = data.sentFrom;
             const updatedUser = data.to;
+            const initiatedChat = data.initiatedChat;
             setUser(updatedUser);
             if (friendRequestDecision === "accept") {
                 addToUserFriends({
@@ -35,12 +38,19 @@ export default function AddFriend({ setAddFriendRef }) {
                     email: sentFrom.email,
                     pfp: sentFrom.pfp
                 });
+                initiatedChat.user = {
+                    _id: sentFrom._id,
+                    username: sentFrom.username,
+                    email: sentFrom.email,
+                    pfp: sentFrom.pfp
+                }
+                addToChats(initiatedChat);
                 toast.info(`${sentFrom.username} accepted your friend request`);
-                toast.info(`You can search them by their username and initiate a chat!`);
+                toast.info(`You can now initiate a chat with them!`);
             }
             removeFromSearchHistory(sentFrom.email);
-        } 
-        catch(error){
+        }
+        catch (error) {
             console.log("Error", error.message);
         }
     }

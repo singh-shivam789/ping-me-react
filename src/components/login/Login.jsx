@@ -11,6 +11,7 @@ import "./login.css"
 export default function Login() {
     const [forgotPassword, setForgotPassword] = useState(false);
     const setUser = useUserStore(state => state.setUser);
+    const setCurrentChat = useChatStore((state) => state.setCurrentChat);
     const setUserFriends = useUserStore(state => state.setUserFriends);
     const setChats = useChatStore(state => state.setChats);
     const setChatUser = useChatStore(state => state.setChatUser);
@@ -27,7 +28,8 @@ export default function Login() {
             try {
                 const formData = new FormData(form);
                 const { email, password } = Object.fromEntries(formData);
-                signInWithEmailAndPassword(email, password).then(response => {
+                signInWithEmailAndPassword(email, password).then(
+                    response => {
                     form.reset();
                     const currentUser = response.data.user;
                     const currentUserFriends = response.data.friends;
@@ -38,7 +40,7 @@ export default function Login() {
                             }
                             else {
                                 const friendId = chat.participants.find((id) => id !== currentUser._id);
-                                chat.user = useAppStore.getState().allUsers.find((user) => user._id === friendId);
+                                chat.user = currentUserFriends.find((user) => user._id === friendId);
                             }
                         })
                         let selfChat = response.chats.find((chat) => chat.isSelfChat === true);
@@ -46,6 +48,7 @@ export default function Login() {
                         const orderedChats = [selfChat, ...otherChats];
                         setChats(orderedChats);
                         setChatUser(orderedChats[0].user);
+                        setCurrentChat(selfChat._id);
                         setUserFriends(currentUserFriends);
                         setUser(currentUser);
                     }).catch(error => {
