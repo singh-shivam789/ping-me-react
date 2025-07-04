@@ -44,6 +44,7 @@ export default function Login() {
                             }
                         })
                         let selfChat = response.chats.find((chat) => chat.isSelfChat === true);
+                        selfChat.read = true;
                         let otherChats = response.chats.filter((chat) => chat.isSelfChat !== true);
                         const orderedChats = [selfChat, ...otherChats];
                         setChats(orderedChats);

@@ -1,4 +1,4 @@
-import { getInitialUserState, logoutUser } from "../../utils/userUtils";
+import { deleteUserAccount, getInitialUserState, logoutUser, removeFriend } from "../../utils/userUtils";
 import useChatStore from "../../lib/stores/user/chatStore";
 import useUserStore from "../../lib/stores/user/userStore";
 import { getInitialAppState } from "../../utils/appUtils";
@@ -12,13 +12,30 @@ import "./detail.css";
 
 export default function Detail() {
   const chatUser = useChatStore((state) => state.chatUser);
-  const currentUser =  useUserStore((state) => state.user);
+  const currentUser = useUserStore((state) => state.user);
+  const isDetailViewVisible = useAppStore((state) => state.isDetailViewVisible);
+
   const removeFriendHandler = () => {
-    //TODO: to implement later
+    try {
+      //TODO: handle later
+    } catch (error) {
+      console.log("Error", err.message);
+      toast.error("Something went wrong!");
+    }
   }
-  const deleteUserHandler = () => {
-    //TODO: to implement later
+
+  const deleteUserHandler = async () => {
+    try {
+      useUserStore.persist.clearStorage();
+      useUserStore.setState(getInitialUserState());
+      await deleteUserAccount(currentUser._id);
+      toast.dark("Sorry to see you go 🥺");
+    } catch (error) {
+      console.log("Error", err.message);
+      toast.error("Something went wrong!");
+    }
   }
+
   const handleLogOut = async (e) => {
     try {
       await logoutUser();
@@ -35,7 +52,7 @@ export default function Detail() {
     }
   }
   return (
-    <div className="detail">
+    <div className={`detail ${isDetailViewVisible ? "" : "hidden"}`}>
       {chatUser && <UserInfo whichUserPage={"userDetail"} user={chatUser} />}
       {chatUser._id !== currentUser._id ? (<FriendOptions />) : (<SelfOptions />)}
       <div className="logoutAndBlock">
