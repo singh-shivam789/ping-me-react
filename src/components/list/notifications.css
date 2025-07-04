@@ -14,11 +14,11 @@
 
 .notification-dot {
     position: absolute;
-    top: 0;
-    right: 0;
+    top: 2px;
+    right: 5px;
     width: 10px;
     height: 10px;
-    background-color: rgb(251, 0, 0);
+    background-color: rgb(211, 66, 66);
     border-radius: 50%;
 }
 

@@ -146,3 +146,22 @@ h3 {
         }
     }
 }
+
+#notification-icon {
+    transition: box-shadow 0.1s, background-color 0.1s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    border-radius: 50%;
+}
+
+#notification-icon:hover {
+    background-color: rgba(69, 95, 99, 0.338);
+    box-shadow: 0 0 8px rgba(69, 95, 99, 0.435);
+}
+
+#notification-icon:active {
+    background-color: rgba(103, 134, 138, 0.604);
+    box-shadow: 0 0 8px rgba(103, 133, 138, 0.603);
+}
