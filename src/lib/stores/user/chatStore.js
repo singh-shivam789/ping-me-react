@@ -6,6 +6,42 @@ const useChatStore = create(
         return {
             chatUser: null,
             chats: [],
+            currentChat: null,
+            addMessageToCurrentChat: (chatId, message) => {
+                set((state) => {
+                    return {
+                        chats: state.chats.map((chat) => {
+                            if(chat._id === chatId){
+                                return {
+                                    ...chat,
+                                    messages: [...chat.messages, message]     
+                                }
+                            }
+                            else return chat;
+                        })
+                    }
+                })
+            },
+            setChatLastMessage: (chatId, message) => {
+                set((state) => {
+                    return {
+                        chats: state.chats.map((chat) => {
+                            if(chat._id === chatId){
+                                return {
+                                    ...chat,
+                                    lastMessage: message   
+                                }
+                            }
+                            else return chat;
+                        })
+                    }
+                })
+            },
+            setCurrentChat: (chatId) => {
+                set((state) => ({
+                    currentChat: chatId
+                }))
+            },
             setChats: (chats) => {
                 set((state) => ({
                     chats: chats

@@ -7,6 +7,12 @@ const useAppStore = create(
             allUsers:[],
             isAddFriendSearchVisible: false,
             showEmojiPicker: false,
+            isDetailViewVisible: false,
+            setIsDetailViewVisible: () => {
+                set((state) => ({
+                    isDetailViewVisible: !state.isDetailViewVisible
+                }))
+            },
             setShowEmojiPicker: () => {
                 set((state) => ({
                     showEmojiPicker: !state.showEmojiPicker

@@ -18,7 +18,7 @@ export async function getUserDocbyIdentifier(identifier, identifierValue) {
 
 export async function createUserWithEmailAndPassword(userData) {
     try {
-        return await axios.post(`http://localhost:3000/user/signup`, userData,
+        return await axios.post("http://localhost:3000/user/signup", userData,
             {
                 withCredentials: true,
                 validateStatus: function (status) {
@@ -36,7 +36,7 @@ export async function createUserWithEmailAndPassword(userData) {
 
 export async function signInWithEmailAndPassword(email, password) {
     try {
-        return await axios.post(`http://localhost:3000/user/signin`, { email, password },
+        return await axios.post("http://localhost:3000/user/signin", { email, password },
             {
                 withCredentials: true
             }
@@ -51,7 +51,7 @@ export async function signInWithEmailAndPassword(email, password) {
 
 export async function getUserValidationState() {
     try {
-        const response = await axios.get(`http://localhost:3000/user/validate`,
+        const response = await axios.get("http://localhost:3000/user/validate",
             {
                 withCredentials: true,
                 validateStatus: function (status) {
@@ -137,6 +137,55 @@ export async function getAllUsersWithMatchingEmails(emails) {
         const errorMessage = error.response?.data?.message
             || error.message
             || 'Error while getting all the users with matching Ids';
+        throw new Error(errorMessage);
+    }
+}
+
+export async function deleteUserAccount(userId) {
+    try {
+        const response = await axios.delete(`http://localhost:3000/user/${userId}`, {
+            withCredentials: true
+        });
+        return response.data;
+    } catch (error) {
+        const errorMessage = error.response?.data?.message
+            || error.message
+            || 'Error while deleting user account';
+        throw new Error(errorMessage);
+    }
+}
+
+export async function removeFriend(userEmail, friendEmail) {
+    try {
+        const response = await axios.patch(`http://localhost:3000/user/removeFriend`, {
+            email: userEmail,
+            friendEmail: friendEmail
+        }, {
+            withCredentials: true
+        });
+        return response.data;
+    } catch (error) {
+        const errorMessage = error.response?.data?.message
+            || error.message
+            || 'Error while removing friend';
+        throw new Error(errorMessage);
+    }
+}
+
+export async function sendMessage(friendId, message, chatId) {
+    try {
+        const response = await axios.post("http://localhost:3000/user/sendMessage", {
+            friendId: friendId,
+            chatId: chatId,
+            message: message,
+        }, {
+            withCredentials: true
+        });
+        return response.data;
+    } catch (error) {
+        const errorMessage = error.response?.data?.message
+            || error.message
+            || 'Error while sending message';
         throw new Error(errorMessage);
     }
 }
