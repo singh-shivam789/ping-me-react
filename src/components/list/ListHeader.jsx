@@ -1,9 +1,10 @@
-import React from 'react'
-
-export default function ListHeader() {
+export default function ListHeader({toggleButtonRef, setIsAddFriendSearchVisible}) {
   return (
     <span className='listHeader'>
-        <h1>Chats</h1>
+        <h1>PingMe</h1>
+        <div ref={toggleButtonRef} onClick={() => setIsAddFriendSearchVisible()} className='addFriendImg'>
+          <img src="/new-message.png" alt="" />
+        </div>
     </span>
   )
 }

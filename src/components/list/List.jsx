@@ -1,7 +1,6 @@
 import useOnClickOutside from "../../hooks/useOnClickOutside";
 import useAppStore from "../../lib/stores/app/appStore";
 import { useEffect, useRef, useState } from "react";
-import AddFriendOption from "./AddFriendOption";
 import AddFriend from "../addFriend/AddFriend";
 import ChatList from "./chatList/ChatList";
 import ListHeader from "./ListHeader";
@@ -21,9 +20,8 @@ export default function List() {
 
   return (
     <div className="list">
-      <ListHeader />
+      <ListHeader setIsAddFriendSearchVisible={setIsAddFriendSearchVisible} toggleButtonRef={toggleButtonRef}/>
       <ChatList />
-      <AddFriendOption toggleButtonRef={toggleButtonRef} setIsAddFriendSearchVisible={setIsAddFriendSearchVisible}/>
       {isAddFriendSearchVisible && <AddFriend setAddFriendRef={setAddFriendRef} />}
     </div>
   )
