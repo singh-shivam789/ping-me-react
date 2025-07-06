@@ -1,4 +1,4 @@
-import { deleteUserAccount, getInitialUserState, logoutUser, removeFriend } from "../../utils/userUtils";
+import { getInitialUserState, logoutUser, removeFriend } from "../../utils/userUtils";
 import useChatStore from "../../lib/stores/user/chatStore";
 import useUserStore from "../../lib/stores/user/userStore";
 import { getInitialAppState } from "../../utils/appUtils";
@@ -18,18 +18,6 @@ export default function Detail() {
   const removeFriendHandler = () => {
     try {
       //TODO: handle later
-    } catch (error) {
-      console.log("Error", err.message);
-      toast.error("Something went wrong!");
-    }
-  }
-
-  const deleteUserHandler = async () => {
-    try {
-      useUserStore.persist.clearStorage();
-      useUserStore.setState(getInitialUserState());
-      await deleteUserAccount(currentUser._id);
-      toast.dark("Sorry to see you go 🥺");
     } catch (error) {
       console.log("Error", err.message);
       toast.error("Something went wrong!");
@@ -56,9 +44,9 @@ export default function Detail() {
       {chatUser && <UserInfo whichUserPage={"userDetail"} user={chatUser} />}
       {chatUser._id !== currentUser._id ? (<FriendOptions />) : (<SelfOptions />)}
       <div className="logoutAndBlock">
-        <div className="blockUser">
-          <button onClick={chatUser._id !== currentUser._id ? removeFriendHandler : deleteUserHandler} className="blockUserBtn">{chatUser._id !== currentUser._id ? "Remove friend" : "Delete Account"}</button>
-        </div>
+        {chatUser._id !== currentUser._id && <div className="blockUser">
+          <button className="blockUserBtn">Remove friend</button>
+        </div>}
         <div className="logout">
           <button onClick={handleLogOut} className="logoutBtn">Logout</button>
         </div>

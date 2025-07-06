@@ -9,7 +9,7 @@ export default function UtilityIcons({ whichUserPage }) {
       return <UtilityIconsChatTop />;
     case "detail":
       return <UtilityIconsDetail />;
-    case "chatBottom": 
+    case "chatBottom":
       return <UtilityIconsChatBottom />;
     default:
       return <UtilityIconsList />;

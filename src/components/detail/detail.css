@@ -3,9 +3,66 @@
     flex-direction: column;
     align-items: center;
     flex: 1;
-    transition: max-width 0.4s ease-in-out;
+    transition: max-width 0.3s ease-in-out;
     max-width: 1000px;
     overflow: hidden;
+}
+
+.zoomedView {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.zoomedViewUserInfoContainer {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    max-width: 95vw;
+    max-height: 95vh;
+    z-index: 99998;
+    background: rgba(31, 31, 31, 0.931);
+    cursor: pointer;
+    border-radius: 10px;
+    display: flex;
+
+    .zoomedViewUserInfo {
+        position: relative;
+        left: 20px;
+        top: 10px;
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+
+        .zoomedViewUserInfoDetails {
+            color: whitesmoke;
+        }
+
+        img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+    }
+}
+
+.zoomedView img {
+    height: 100%;
+    width: 100%;
+    max-width: 70vw;
+    max-height: 70vh;
+    border-radius: 8px;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.5);
+    cursor: default;
+    object-fit: cover;
 }
 
 .detail.hidden {
@@ -18,13 +75,133 @@
     gap: 10px;
     width: 100%;
     padding: 20px;
+    max-height: 90%;
+    overflow-y: auto;
 
     .option {
         display: flex;
-        justify-content: space-between;
+        justify-content: center;
         flex-direction: column;
         width: 100%;
         gap: 10px;
+
+        .mediaContainer {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            overflow-y: auto;
+            transition: max-height 0.3s ease-in-out;
+            align-items: center;
+            justify-content: center;
+            margin-top: 10px;
+            max-width: fit-content;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+
+            img {
+                border: 0.5px solid whitesmoke;
+                cursor: pointer;
+                width: 80px;
+                height: 80px;
+                object-fit: cover;
+
+            }
+        }
+
+        .mediaContainer::-webkit-scrollbar {
+            display: none;
+        }
+
+        .optionHeader {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .optionFormSection {
+            overflow: hidden;
+            padding: 0 25px;
+        }
+
+        .optionFormSectionHeaderForm {
+            padding: 0 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            overflow: hidden;
+            transition: 0.3s max-height ease-in-out;
+
+            .formLabel {
+                font-size: 14px;
+            }
+
+            .confirmOptionChoice {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                width: 60%;
+                padding: 8px;
+                p{
+                    align-self: center;
+                }
+                div {
+                    gap: 10px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+            }
+        }
+
+        .optionForm {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: 0.3s all ease-in-out;
+        }
+
+        .optionFormInput {
+            padding: 5px;
+            border: none;
+            outline: none;
+            border-radius: 5px;
+            margin: 2% 0;
+            width: 90%;
+        }
+
+        .optionFormBtn {
+            background-color: rgba(69, 95, 99);
+            color: whitesmoke;
+            width: 80%;
+            border: none;
+            outline: none;
+            padding: 10px;
+            color: whitesmoke;
+            border-radius: 5px;
+            transition: all 0.1s ease-in-out;
+
+            &.blockUserBtn {
+                background-color: rgba(184, 25, 25, 0.483);
+            }
+
+            &.blockUserBtn:hover {
+                background-color: rgba(184, 25, 25);
+                cursor: pointer;
+                color: whitesmoke;
+            }
+
+            &.formSubmitBtn {
+                align-self: flex-end;
+                width: 50%;
+                padding: 6px !important; 
+            }
+        }
+
+        .optionFormBtn:hover {
+            background-color: whitesmoke;
+            color: black;
+            cursor: pointer;
+        }
 
         .expandBtn {
             -webkit-backdrop-filter: blur(150px) brightness(0.7) saturate(110%);
@@ -44,38 +221,21 @@
             }
         }
 
+        .optionFormSectionHeader {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+        }
+
+        .expandBtn:active {}
+
+        .settingsExpanded,
         .filesExpanded {
             width: 100%;
             display: flex;
             flex-direction: column;
             gap: 10px;
-
-            .previewImg {
-                border-radius: 8px;
-                width: 35px;
-                height: 35px;
-            }
-        }
-
-        .file {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .files {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .previewImageInfo {
-            width: 35%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            transition: 0.3s all ease-in-out;
         }
     }
 }

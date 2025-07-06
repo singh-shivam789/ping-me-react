@@ -107,11 +107,6 @@
     color: darkgray;
 }
 
-.userStatus {
-    font-size: 15px;
-    color: lightgray;
-}
-
 h3 {
     font-size: 20px;
     font-weight: 900 !important;
@@ -120,28 +115,52 @@ h3 {
 .userDetailContainer {
     border-bottom: 1.5px solid rgb(245, 245, 245, 0.35);
     width: 100%;
-    padding: 20px;
+    padding: 12px;
+    min-height: 34%;
 
     .userDetail {
         display: flex;
         flex-direction: column !important;
         align-items: center;
-        gap: 10px;
+        justify-content: space-around !important;
+        height: 100%;
 
-        img {
-            width: 90px;
-            height: 90px;
-            border-radius: 50%;
+        .userDetailAbout {
+            width: 100%;
+            height: 20%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-left: 16px;
+
+            p {
+                color: lightgray;
+                font-size: 16px;
+            }
+
+            .userStatus{
+                width: 90%;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                color: ghostwhite;
+                font-size: 18px;
+                text-wrap: nowrap;
+            }
         }
 
-        .userDetailNameStatus {
+        .userDetailContactPfp {
             display: flex;
             flex-direction: column;
             align-items: center;
+            width: 90%;
+            height: 80%;
             gap: 10px;
 
-            p {
-                color: whitesmoke;
+            img {
+                width: 90px;
+                height: 90px;
+                margin-top: 5px;
+                border-radius: 50%;
             }
         }
     }

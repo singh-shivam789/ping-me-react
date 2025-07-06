@@ -16,7 +16,7 @@
         justify-content: space-around;
         border-top: 1.5px solid rgb(245, 245, 245, 0.35);
         margin-top: auto;
-
+        gap: 8px;
         .emojiSend {
             display: flex;
             align-items: center;

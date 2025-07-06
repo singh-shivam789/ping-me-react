@@ -1,72 +1,168 @@
-export default function FriendOptions() {
+import { createPortal } from "react-dom";
+import { useEffect, useState } from "react";
+
+export default function SelfOptions() {
+  const [mediaExpanded, setMediaExpanded] = useState(false);
+  const [profileExpanded, setProfileExpanded] = useState(false);
+  const [accountExpanded, setAccountExpanded] = useState(false);
+  const [settingsExpanded, setSettingsExpanded] = useState(false);
+  const [zoomedViewToggle, setZoomedViewToggle] = useState(false);
+  const [zoomedViewUrl, setZoomedViewUrl] = useState(null);
+
+  const [clearChatToggle, setClearChatToggle] = useState(false);
+  const [changePasswordToggle, setChangePasswordToggle] = useState(false);
+  const [deleteAccountToggle, setDeleteAccountToggle] = useState(false);
+
+  const mediaMaxHeight = mediaExpanded ? "500px" : "0";
+  const settingsMaxHeight = settingsExpanded ? "500px" : "0";
+  const profileSettingsMaxHeight = profileExpanded ? "500px" : "0";
+  const accountSettingsMaxHeight = accountExpanded ? "500px" : "0";
+  const accountOptionsDisplay = (changePasswordToggle || clearChatToggle || deleteAccountToggle) ? "none" : "block";
+
+  const profileSettingsFormSubmitHandler = (e) => {
+    e.preventDefault();
+  }
+
+  const accountSettingsFormSubmitHandler = (e) => {
+    e.preventDefault();
+  }
+
+  const deleteUserAccountHandler = async () => {
+    try {
+      useUserStore.persist.clearStorage();
+      useUserStore.setState(getInitialUserState());
+      await deleteUserAccount(currentUser._id);
+      toast.dark("Sorry to see you go 🥺");
+    } catch (error) {
+      console.log("Error", err.message);
+      toast.error("Something went wrong!");
+    }
+  }
+
+  const changePasswordHandler = () => {
+    
+  }
+
+  const clearUserChatHandler = () => {
+
+  }
+
+  const imageZoomedViewHandler = () => {
+    setZoomedViewToggle((prev) => !prev);
+    setZoomedViewUrl("/test.png");
+  }
+
   return (
     <div className="options">
-      <div className="option sharedFiles">
-        <div className="files">
-          <span>Self Chat Settings</span>
-          <div className="expandBtn">
-            <img src="/arrowUp.png" alt="arrowUp.png" />
+      <div className="option">
+        <div className="optionHeader">
+          <h3>Settings</h3>
+          <div onClick={() => {
+            setSettingsExpanded((prev) => !prev);
+          }} className="expandBtn">
+            <img src={settingsExpanded ? `/arrowUp.png` : `arrowDown.png`} />
           </div>
         </div>
-        <div className="filesExpanded">
+        <div style={{ maxHeight: settingsMaxHeight }} className="optionForm">
+          <div className="optionFormSection">
+            <div className="optionFormSectionHeader">
+              <h4>Profile</h4>
+              <div onClick={() => {
+                setProfileExpanded((prev) => !prev);
+              }} className="expandBtn">
+                <img src={profileExpanded ? `/arrowUp.png` : `arrowDown.png`} alt="arrowUp.png" />
+              </div>
+            </div>
+            <form style={{ maxHeight: profileSettingsMaxHeight, alignItems: "flex-start" }} className="optionFormSectionHeaderForm" onSubmit={profileSettingsFormSubmitHandler}>
+              <label className="formLabel">Username</label>
+              <input className="optionFormInput" type="text" />
+              <label className="formLabel">Email</label>
+              <input className="optionFormInput" type="text" />
+              <label className="formLabel">Status</label>
+              <input className="optionFormInput" type="text" />
+              <button className="optionFormBtn formSubmitBtn" type="submit">Save Changes</button>
+            </form>
+          </div>
+          <div className="optionFormSection">
+            <div className="optionFormSectionHeader">
+              <h4>Account</h4>
+              <div onClick={() => {
+                setAccountExpanded((prev) => !prev);
+              }} className="expandBtn">
+                <img src={accountExpanded ? `/arrowUp.png` : `/arrowDown.png`} alt="arrowUp.png" />
+              </div>
+            </div>
+            <form style={{ maxHeight: accountSettingsMaxHeight }} className="optionFormSectionHeaderForm" onSubmit={accountSettingsFormSubmitHandler}>
+              <button style={{ display: accountOptionsDisplay }} className="optionFormBtn" onClick={() => { setChangePasswordToggle((prev) => !prev) }}>Change Password</button>
+              <button style={{ display: accountOptionsDisplay }} className="optionFormBtn" onClick={() => { setClearChatToggle((prev) => !prev) }}>Clear Chat</button>
+              <button style={{ display: accountOptionsDisplay }} className="optionFormBtn blockUserBtn" onClick={() => { setDeleteAccountToggle((prev) => !prev) }}>Delete Account</button>
+              {deleteAccountToggle && <div className="confirmOptionChoice">
+                <p>Are you sure?</p>
+                <div>
+                  <button className="optionFormBtn formSubmitBtn" onClick={deleteUserAccountHandler}>Yes</button>
+                  <div onClick={() => { setDeleteAccountToggle((prev) => !prev) }} className="expandBtn">
+                    <img src="/arrowLeft.png" />
+                  </div>
+                </div>
+              </div>}
+              {clearChatToggle && <div className="confirmOptionChoice">
+                <p>Are you sure?</p>
+                <div>
+                  <button className="optionFormBtn formSubmitBtn" onClick={clearUserChatHandler}>Yes</button>
+                  <div onClick={() => { setClearChatToggle((prev) => !prev) }} className="expandBtn">
+                    <img src="/arrowLeft.png" />
+                  </div>
+                </div>
+              </div>}
+              {changePasswordToggle && <div>
+                <label className="formLabel">Old Password</label>
+                <input className="optionFormInput" type="password" />
+                <label className="formLabel">New Password</label>
+                <input className="optionFormInput" type="password" />
+                <div style={{ marginTop: "10px", width: "90%", height: "100%", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                  <button style={{ margin: "0px" }} className="optionFormBtn formSubmitBtn" type="submit">Confirm</button>
+                  <div onClick={() => { setChangePasswordToggle((prev) => !prev) }} className="expandBtn">
+                    <img src="/arrowLeft.png" />
+                  </div>
+                </div>
+              </div>}
+            </form>
+          </div>
         </div>
       </div>
-      <div className="option sharedFiles">
-        <div className="files">
-          <span>Privacy & Help</span>
-          <div className="expandBtn">
-            <img src="/arrowUp.png" alt="arrowUp.png" />
+      <div style={{ display: "flex" }} className="option">
+        <div className="optionHeader">
+          <h3>Media</h3>
+          <div onClick={() => {
+            setMediaExpanded((prev) => !prev);
+          }} className="expandBtn">
+            <img src={mediaExpanded ? `/arrowUp.png` : `arrowDown.png`} alt="arrowUp.png" />
           </div>
         </div>
-        <div className="filesExpanded">
+        <div style={{ maxHeight: mediaMaxHeight }} className="mediaContainer">
+          {/* TODO: After image uploads, get all the messages with media, and build a gallary using those images */}
+          {/* sample render for ui */}
+          <img onClick={imageZoomedViewHandler} src="/test.png" />
+          <img onClick={imageZoomedViewHandler} src="/test.png" />
+          <img onClick={imageZoomedViewHandler} src="/test.png" />
+
         </div>
-      </div>
-      <div className="option sharedFiles">
-        <div className="files">
-          <span>Shared Images</span>
-          <div className="expandBtn">
-            <img src="/arrowUp.png" alt="arrowUp.png" />
-          </div>
-        </div>
-        <div className="filesExpanded">
-        </div>
-      </div>
-      <div className="option sharedFiles">
-        <div className="files">
-          <span>Shared Files</span>
-          <div className="expandBtn">
-            <img src="/arrowUp.png" alt="arrowUp.png" />
-          </div>
-        </div>
-        <div className="filesExpanded">
-          <div className="file">
-            <div className="previewImageInfo">
-              <img className="previewImg" src="https://images.pexels.com/photos/210019/pexels-photo-210019.jpeg?cs=srgb&dl=pexels-pixabay-210019.jpg&fm=jpg" alt="img.png" />
-              <span className="fileName">photo_1.png</span>
-            </div>
-            <div className="expandBtn">
-              <img src="download.png" alt="" />
-            </div>
-          </div>
-          <div className="file">
-            <div className="previewImageInfo">
-              <img className="previewImg" src="https://images.pexels.com/photos/210019/pexels-photo-210019.jpeg?cs=srgb&dl=pexels-pixabay-210019.jpg&fm=jpg" alt="img.png" />
-              <span className="fileName">photo_1.png</span>
-            </div>
-            <div className="expandBtn">
-              <img src="download.png" alt="" />
-            </div>
-          </div>
-          <div className="file">
-            <div className="previewImageInfo">
-              <img className="previewImg" src="https://images.pexels.com/photos/210019/pexels-photo-210019.jpeg?cs=srgb&dl=pexels-pixabay-210019.jpg&fm=jpg" alt="img.png" />
-              <span className="fileName">photo_1.png</span>
-            </div>
-            <div className="expandBtn">
-              <img src="download.png" alt="" />
-            </div>
-          </div>
-        </div>
+        {zoomedViewToggle &&
+          createPortal(
+            <div className="zoomedView" onClick={() => { setZoomedViewToggle((prev) => !prev) }}>
+              <img src={zoomedViewUrl} />
+              {createPortal(<div className="zoomedViewUserInfoContainer">
+                <div className="zoomedViewUserInfo">
+                  <img src="/avatar.png" />
+                  <div className="zoomedViewUserInfoDetails">
+                    <h3 style={{ marginBottom: "5px" }}>You</h3>
+                    <p>Yesterday at 5:30 pm</p>
+                  </div>
+                </div>
+              </div>, document.body)}
+            </div>,
+            document.body
+          )}
       </div>
     </div >
   )
