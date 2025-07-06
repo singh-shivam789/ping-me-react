@@ -13,7 +13,6 @@ export default function UserInfoChat({ user }) {
           <p className="userStatus">{user.status}</p>
         </div>
       </div>)}
-      {user._id !== currentUser._id && <UtilityIcons whichUserPage="chatTop" />}
     </div>
   );
 }

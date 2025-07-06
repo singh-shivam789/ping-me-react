@@ -91,11 +91,11 @@ const ChatBottom = () => {
   useOnClickOutside(emojiPickerRef, toggleButtonRef, setShowEmojiPicker, showEmojiPicker);
   return (
     <div className="chatBottom">
-      <UtilityIcons whichUserPage="chatBottom" />
       <div className="typeBar">
         <input onKeyDown={messageSendHandler} type="text" onChange={inputTextHandler} required={true} value={inputText} placeholder="Type a message..." />
       </div>
       <div className="emojiSend">
+        <UtilityIcons whichUserPage="chatBottom" />
         <img ref={toggleButtonRef} onClick={() => { setShowEmojiPicker() }} className="emoji" src="/emoji.png" alt="emoji.png" />
         <div ref={emojiPickerRef} className="emojiPickerContainer">
           <EmojiPicker open={showEmojiPicker} onEmojiClick={emojiClickHandler} className="emojiPicker" />
