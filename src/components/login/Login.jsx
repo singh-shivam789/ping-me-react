@@ -16,10 +16,6 @@ export default function Login() {
     const setChats = useChatStore(state => state.setChats);
     const setChatUser = useChatStore(state => state.setChatUser);
     const addNewUser = useAppStore((state) => state.addNewUser);
-    const [profilePic, setProfilePic] = useState({
-        file: null,
-        url: ""
-    })
 
     const handleSignIn = async (e) => {
         e.preventDefault();
@@ -30,36 +26,36 @@ export default function Login() {
                 const { email, password } = Object.fromEntries(formData);
                 signInWithEmailAndPassword(email, password).then(
                     response => {
-                    form.reset();
-                    const currentUser = response.data.user;
-                    const currentUserFriends = response.data.friends;
-                    getAllUserChats(response.data.user._id).then((response) => {
-                        response.chats.forEach((chat) => {
-                            if (chat.isSelfChat) {
-                                chat.user = currentUser;
-                            }
-                            else {
-                                const friendId = chat.participants.find((id) => id !== currentUser._id);
-                                chat.user = currentUserFriends.find((user) => user._id === friendId);
-                            }
+                        form.reset();
+                        const currentUser = response.data.user;
+                        const currentUserFriends = response.data.friends;
+                        getAllUserChats(response.data.user._id).then((response) => {
+                            response.chats.forEach((chat) => {
+                                if (chat.isSelfChat) {
+                                    chat.user = currentUser;
+                                }
+                                else {
+                                    const friendId = chat.participants.find((id) => id !== currentUser._id);
+                                    chat.user = currentUserFriends.find((user) => user._id === friendId);
+                                }
+                            })
+                            let selfChat = response.chats.find((chat) => chat.isSelfChat === true);
+                            selfChat.read = true;
+                            let otherChats = response.chats.filter((chat) => chat.isSelfChat !== true);
+                            const orderedChats = [selfChat, ...otherChats];
+                            setChats(orderedChats);
+                            setChatUser(orderedChats[0].user);
+                            setCurrentChat(selfChat._id);
+                            setUserFriends(currentUserFriends);
+                            setUser(currentUser);
+                        }).catch(error => {
+                            throw new Error(error.message);
                         })
-                        let selfChat = response.chats.find((chat) => chat.isSelfChat === true);
-                        selfChat.read = true;
-                        let otherChats = response.chats.filter((chat) => chat.isSelfChat !== true);
-                        const orderedChats = [selfChat, ...otherChats];
-                        setChats(orderedChats);
-                        setChatUser(orderedChats[0].user);
-                        setCurrentChat(selfChat._id);
-                        setUserFriends(currentUserFriends);
-                        setUser(currentUser);
+                        toast.success("Successfully signed in!");
                     }).catch(error => {
-                        throw new Error(error.message);
+                        console.log(error.stack);
+                        toast.error(error.message);
                     })
-                    toast.success("Successfully signed in!");
-                }).catch(error => {
-                    console.log(error.stack);
-                    toast.error(error.message);
-                })
             } catch (err) {
                 console.log(err.stack);
                 toast.error("Something went wrong!");
@@ -111,62 +107,35 @@ export default function Login() {
         //TODO: For later
     }
 
-    const setProfilePicture = async (e) => {
-        e.preventDefault();
-        try {
-            if (e.target.files[0]) {
-                let file = e.target.files[0];
-                let url = URL.createObjectURL(file);
-                setProfilePic({
-                    file: file,
-                    url: url
-                });
-            } else {
-                setProfilePic({
-                    file: null,
-                    url: ""
-                })
-            }
-        } catch (err) {
-            console.log(err.stack);
-            toast.error("Error while uploading file!");
-        }
-    }
     return (
-        (forgotPassword ? <ForgotPassword /> : (<div className="login">
-            <form className="signin" onSubmit={handleSignIn}>
-                <h1>Welcome back</h1>
-                <input required type="email" name="email" placeholder="Email" />
-                <input required type="password" name="password" placeholder="Password" />
-                <input className="btn" type="submit" value="Sign In" />
-            </form>
-            <form className="signup" onSubmit={handleSignUp}>
-                <h1>Create Account</h1>
-                <div className="imgUpload">
-                    <img src={profilePic.url || "/avatar.png"} alt="profilePic.png" />
-                    <label style={{ "cursor": "pointer" }} htmlFor="fileInput">Upload an image</label>
+        (forgotPassword ? <ForgotPassword /> : (
+            <div className="login">
+                <div className="loginHeader">
+                    <h1>PingMe</h1>
+                    <h3>Always Stay connected</h3>
                 </div>
-                <input onChange={setProfilePicture} style={{ display: "none" }} id="fileInput" type="file" />
-                <input required
-                    type="text"
-                    name="username"
-                    placeholder="Username"
-                    minLength="3"
-                    maxLength="15"
-                    pattern="^[a-zA-Z0-9_]+$"
-                    title="Username should be 3-15 characters long and contain only letters, numbers, and underscores."
-                />
-                <input required type="email" name="email" placeholder="Email" />
-                <input required
-                    type="password"
-                    name="password"
-                    placeholder="Password"
-                    minLength="3"
-                    maxLength="15"
-                    pattern="^[a-zA-Z0-9_@]+$"
-                    title="Password should be 3-15 characters long and contain only letters, numbers, and underscores." />
-                <input className="btn" type="submit" value="Sign Up" />
-            </form>
-        </div>))
+                <div className="loginForms">
+                    <form className="signin" onSubmit={handleSignIn}>
+                        <h1>Welcome back</h1>
+                        <input required type="email" name="email" placeholder="Email" />
+                        <input required type="password" name="password" placeholder="Password" />
+                        <input className="btn" type="submit" value="Sign In" />
+                    </form>
+                    <form className="signup" onSubmit={handleSignUp}>
+                        <h1>Create Account</h1>
+                        <input required type="email" name="email" placeholder="Email" />
+                        <input required
+                            type="password"
+                            name="password"
+                            placeholder="Password"
+                            minLength="3"
+                            maxLength="15"
+                            pattern="^[a-zA-Z0-9_@]+$"
+                            title="Password should be 3-15 characters long and contain only letters, numbers, and underscores." />
+                        <input className="btn" type="submit" value="Sign Up" />
+                    </form>
+                </div>
+            </div>
+        ))
     )
 }
