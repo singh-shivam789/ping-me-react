@@ -40,7 +40,7 @@ export default function SelfOptions() {
   }
 
   const changePasswordHandler = () => {
-    
+
   }
 
   const clearUserChatHandler = () => {
@@ -75,11 +75,27 @@ export default function SelfOptions() {
             </div>
             <form style={{ maxHeight: profileSettingsMaxHeight, alignItems: "flex-start" }} className="optionFormSectionHeaderForm" onSubmit={profileSettingsFormSubmitHandler}>
               <label className="formLabel">Username</label>
-              <input className="optionFormInput" type="text" />
+              <input className="optionFormInput" type="text"
+                name="username"
+                required
+                minLength={3}
+                maxLength={20}
+                pattern="^[a-zA-Z0-9_]+$"
+                title="Username should be 3-20 characters long and contain only letters, numbers, and underscores." />
               <label className="formLabel">Email</label>
-              <input className="optionFormInput" type="text" />
+              <input className="optionFormInput" type="text"
+                name="email"
+                required
+                maxLength={50}
+                pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+                title="Please enter a valid email address."
+              />
               <label className="formLabel">Status</label>
-              <input className="optionFormInput" type="text" />
+              <input className="optionFormInput" type="text"
+                name="status"
+                maxLength={50}
+                pattern="^[a-zA-Z0-9 _.,!?'-]*$"
+                title="Status can contain up to 50 letters, numbers, spaces, and punctuation." />
               <button className="optionFormBtn formSubmitBtn" type="submit">Save Changes</button>
             </form>
           </div>
@@ -116,9 +132,21 @@ export default function SelfOptions() {
               </div>}
               {changePasswordToggle && <div>
                 <label className="formLabel">Old Password</label>
-                <input className="optionFormInput" type="password" />
+                <input className="optionFormInput"
+                  required={true}
+                  type="password"
+                  minLength="3"
+                  maxLength="15"
+                  pattern="^[a-zA-Z0-9_@]+$"
+                  title="Password should be 3-15 characters long and contain only letters, numbers, and underscores." />
                 <label className="formLabel">New Password</label>
-                <input className="optionFormInput" type="password" />
+                <input className="optionFormInput"
+                  required={true}
+                  type="password"
+                  minLength="3"
+                  maxLength="15"
+                  pattern="^[a-zA-Z0-9_@]+$"
+                  title="Password should be 3-15 characters long and contain only letters, numbers, and underscores." />
                 <div style={{ marginTop: "10px", width: "90%", height: "100%", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                   <button style={{ margin: "0px" }} className="optionFormBtn formSubmitBtn" type="submit">Confirm</button>
                   <div onClick={() => { setChangePasswordToggle((prev) => !prev) }} className="expandBtn">
