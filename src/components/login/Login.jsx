@@ -102,40 +102,36 @@ export default function Login() {
         }
     };
 
-    const handleForgotPassword = async (e) => {
-        setForgotPassword((prev) => !prev);
-        //TODO: For later
-    }
-
     return (
-        (forgotPassword ? <ForgotPassword /> : (
-            <div className="login">
-                <div className="loginHeader">
-                    <h1>PingMe</h1>
-                    <h3>Always Stay connected</h3>
-                </div>
-                <div className="loginForms">
-                    <form className="signin" onSubmit={handleSignIn}>
+        <div className="login">
+            <div className="loginHeader">
+                <h1>PingMe</h1>
+                <h3>Always Stay connected</h3>
+            </div>
+            <div className="loginForms">
+                <form className="signin" onSubmit={handleSignIn}>
+                    {forgotPassword ? <ForgotPassword setForgotPassword={setForgotPassword}/> : <>
                         <h1>Welcome back</h1>
                         <input required type="email" name="email" placeholder="Email" />
                         <input required type="password" name="password" placeholder="Password" />
                         <input className="btn" type="submit" value="Sign In" />
-                    </form>
-                    <form className="signup" onSubmit={handleSignUp}>
-                        <h1>Create Account</h1>
-                        <input required type="email" name="email" placeholder="Email" />
-                        <input required
-                            type="password"
-                            name="password"
-                            placeholder="Password"
-                            minLength="3"
-                            maxLength="15"
-                            pattern="^[a-zA-Z0-9_@]+$"
-                            title="Password should be 3-15 characters long and contain only letters, numbers, and underscores." />
-                        <input className="btn" type="submit" value="Sign Up" />
-                    </form>
-                </div>
+                        <input onClick={() => { setForgotPassword((prev) => !prev) }} className="btn" type="button" value="Forgot Password" />
+                    </>}
+                </form>
+                <form className="signup" onSubmit={handleSignUp}>
+                    <h1>Create Account</h1>
+                    <input required type="email" name="email" placeholder="Email" />
+                    <input required
+                        type="password"
+                        name="password"
+                        placeholder="Password"
+                        minLength="3"
+                        maxLength="15"
+                        pattern="^[a-zA-Z0-9_@]+$"
+                        title="Password should be 3-15 characters long and contain only letters, numbers, and underscores." />
+                    <input className="btn" type="submit" value="Sign Up" />
+                </form>
             </div>
-        ))
+        </div>
     )
 }
