@@ -15,6 +15,7 @@
     border-radius: 50%;
     width: 50px;
     height: 50px;
+    object-fit: cover;
 }
 
 .listIcons {
@@ -27,6 +28,7 @@
     width: 20px;
     height: 20px;
     transition: color 0.3s ease-in;
+    object-fit: cover;
 }
 
 .listIcons>img:hover {
@@ -51,6 +53,7 @@
 }
 
 .userChat>img {
+    object-fit: cover;
     border-radius: 50%;
     width: 60px;
     height: 60px;
@@ -66,6 +69,7 @@
     width: 20px;
     height: 20px;
     transition: color 0.3s ease-in !important;
+    object-fit: cover;
 }
 
 .chatIcons>img:hover {
@@ -83,6 +87,7 @@
     width: 20px;
     height: 20px;
     transition: color 0.3s ease-in !important;
+    object-fit: cover;
 }
 
 .detailIcons>img:hover {
@@ -100,6 +105,7 @@
     width: 20px;
     height: 20px;
     transition: color 0.3s ease-in !important;
+    object-fit: cover;
 }
 
 .chatBottomIcons>img:hover {
@@ -138,7 +144,7 @@ h3 {
                 font-size: 16px;
             }
 
-            .userStatus{
+            .userStatus {
                 width: 90%;
                 overflow: hidden;
                 text-overflow: ellipsis;
@@ -161,6 +167,7 @@ h3 {
                 height: 90px;
                 margin-top: 5px;
                 border-radius: 50%;
+                object-fit: cover;
             }
         }
     }

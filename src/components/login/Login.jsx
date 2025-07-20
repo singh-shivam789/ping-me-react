@@ -3,7 +3,6 @@ import ForgotPassword from "../forgotPassword/ForgotPassword";
 import useChatStore from "../../lib/stores/user/chatStore";
 import useUserStore from "../../lib/stores/user/userStore";
 import { getAllUserChats } from "../../utils/chatUtils";
-import useAppStore from "../../lib/stores/app/appStore";
 import { toast } from "react-toastify";
 import { useState } from "react";
 import "./login.css"
@@ -15,7 +14,7 @@ export default function Login() {
     const setUserFriends = useUserStore(state => state.setUserFriends);
     const setChats = useChatStore(state => state.setChats);
     const setChatUser = useChatStore(state => state.setChatUser);
-    const addNewUser = useAppStore((state) => state.addNewUser);
+    const setIsNewUser = useUserStore((state) => state.setIsNewUser);
 
     const handleSignIn = async (e) => {
         e.preventDefault();
@@ -29,6 +28,7 @@ export default function Login() {
                         form.reset();
                         const currentUser = response.data.user;
                         const currentUserFriends = response.data.friends;
+                        if(!currentUser.username || currentUser.username === "") setIsNewUser(true);
                         getAllUserChats(response.data.user._id).then((response) => {
                             response.chats.forEach((chat) => {
                                 if (chat.isSelfChat) {
@@ -56,8 +56,8 @@ export default function Login() {
                         console.log(error.stack);
                         toast.error(error.message);
                     })
-            } catch (err) {
-                console.log(err.stack);
+            } catch (error) {
+                console.log(error.stack);
                 toast.error("Something went wrong!");
             }
         } else {
@@ -85,17 +85,23 @@ export default function Login() {
                     } else if (response.status === 409) {
                         toast.warn("Email already in use!");
                     } else {
-                        toast.success("Account successfully created! You can login now!");
-                        addNewUser(response.data.newUser);
+                        const chats = [];
+                        const selfChat = response.data.selfChat;
+                        selfChat.user = response.data.user;
+                        chats.push(selfChat);
+                        setChats(chats);
+                        setCurrentChat(selfChat._id);
+                        setIsNewUser(true);
+                        setUser(response.data.user);
                     }
                     form.reset();
                 }).catch(error => {
                     console.log(error);
                     throw new Error(error.message);
                 });
-            } catch (err) {
-                console.log(err.stack);
-                toast.error(err.message);
+            } catch (error) {
+                console.log(error.stack);
+                toast.error(error.message);
             }
         } else {
             form.reportValidity();
@@ -110,7 +116,7 @@ export default function Login() {
             </div>
             <div className="loginForms">
                 <form className="signin" onSubmit={handleSignIn}>
-                    {forgotPassword ? <ForgotPassword setForgotPassword={setForgotPassword}/> : <>
+                    {forgotPassword ? <ForgotPassword setForgotPassword={setForgotPassword} /> : <>
                         <h1>Welcome back</h1>
                         <input required type="email" name="email" placeholder="Email" />
                         <input required type="password" name="password" placeholder="Password" />

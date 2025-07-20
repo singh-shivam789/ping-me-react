@@ -53,9 +53,8 @@ export default function ChatList() {
   }
   
   const sortedChats = useMemo(() => {
-    const list = chats;
-    if(searchInput === "") return list;
-    else return list.sort((a, b) => sortChatsBasedOnSearch(a, b, searchInput))
+    if(searchInput === "") return chats;
+    else return [...chats].sort((a, b) => sortChatsBasedOnSearch(a, b, searchInput))
   }, [chats, searchInput])
 
 

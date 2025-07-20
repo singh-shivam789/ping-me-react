@@ -5,6 +5,7 @@ const useUserStore = create(
     persist((set) => {
         return {
             user: null,
+            isNewUser: false,
             chats: [],
             lastSearched: null,
             searchHistory: [],
@@ -12,6 +13,11 @@ const useUserStore = create(
             friendRequestUsers: [],
             notificationBellActive: false,
             userFriends: [],
+            setIsNewUser: (flag) => {
+                set((state) => ({
+                    isNewUser: flag
+                }))
+            },
             setUserFriends: (friends) => {
                 set((state) => ({
                     userFriends: [...friends]
@@ -20,11 +26,10 @@ const useUserStore = create(
             addToUserFriends: (friend) => {
                 set((state) => {
                     const doesExist = state.userFriends.some((frUser) => frUser.email === friend.email);
-                    if(!doesExist) return {
+                    if (!doesExist) return {
                         userFriends: [...state.userFriends, friend]
                     }
                     else return {}
-
                 })
             },
             setNotificationBellActive: (isActive) => {
@@ -39,8 +44,8 @@ const useUserStore = create(
             },
             addToFriendRequestUsers: (user) => {
                 set((state) => {
-                   const doesExist = state.friendRequestUsers.some((frUser) => frUser.email === user.email);
-                    if(!doesExist) return {
+                    const doesExist = state.friendRequestUsers.some((frUser) => frUser.email === user.email);
+                    if (!doesExist) return {
                         friendRequestUsers: [...state.friendRequestUsers, user]
                     }
                     else return {}
@@ -70,7 +75,7 @@ const useUserStore = create(
                 set((state) => ({
                     searchHistory: state.searchHistory.filter((users) => (users.email !== email))
                 }))
-            }, 
+            },
             setLastSearched: (search) => {
                 set((state) => ({
                     lastSearched: search

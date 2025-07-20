@@ -7,6 +7,19 @@ const useChatStore = create(
             chatUser: null,
             chats: [],
             currentChat: null,
+            setSelfChatUser: (updatedUser) => {
+                set((state) => ({
+                    chats: state.chats.map((chat) => {
+                        if (chat.isSelfChat) {
+                            return {
+                                ...chat,
+                                user: updatedUser
+                            }
+                        }
+                        else return chat;
+                    })
+                }))
+            },
             addMessageToCurrentChat: (chatId, message) => {
                 set((state) => {
                     return {

@@ -2,7 +2,7 @@ import axios from "axios";
 
 export async function fetchAllUsers(){
     try {
-        let response = await axios.get("http://localhost:3000/users/all", {
+        let response = await axios.get(`${import.meta.env.VITE_API_URL}/users/all`, {
             withCredentials: true
         });
         return response.data.users;
@@ -14,15 +14,10 @@ export async function fetchAllUsers(){
     }
 }
 
-export function getInitialAppState() {
-    return {
-        allUsers: []
-    }
-}
 
 export const SOCKET_OPTIONS = {
     withCredentials: true,
     transports: ["websocket", "polling"]
 }
 
-export const SOCKET_URL = "http://localhost:3000"
+export const SOCKET_URL = import.meta.env.VITE_API_URL

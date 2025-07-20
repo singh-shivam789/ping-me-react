@@ -2,7 +2,23 @@ import axios from "axios";
 
 export async function getUserDocbyIdentifier(identifier, identifierValue) {
     try {
-        const response = await axios.get(`http://localhost:3000/user?${identifier}=${identifierValue}`,
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/user?${identifier}=${identifierValue}`,
+            {
+                withCredentials: true,
+                validateStatus: function (status) {
+                    return status < 500
+                }
+            }
+        );
+        return response.data.user;
+    } catch (error) {
+        throw new Error(error.message);
+    }
+}
+
+export async function getUserById(userId) {
+    try {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/user/${userId}`,
             {
                 withCredentials: true,
                 validateStatus: function (status) {
@@ -18,7 +34,7 @@ export async function getUserDocbyIdentifier(identifier, identifierValue) {
 
 export async function createUserWithEmailAndPassword(userData) {
     try {
-        return await axios.post("http://localhost:3000/user/signup", userData,
+        return await axios.post(`${import.meta.env.VITE_API_URL}/user/signup`, userData,
             {
                 withCredentials: true,
                 validateStatus: function (status) {
@@ -34,9 +50,28 @@ export async function createUserWithEmailAndPassword(userData) {
     }
 }
 
+export async function onboardUser(userData) {
+    try {
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/user/onboard`, userData,
+            {
+                withCredentials: true,
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            }
+        )
+        return response.data;
+    } catch (error) {
+        const errorMessage = error.response?.data?.message
+            || error.message
+            || 'Error while onboarding user';
+        throw new Error(errorMessage);
+    }
+}
+
 export async function signInWithEmailAndPassword(email, password) {
     try {
-        return await axios.post("http://localhost:3000/user/signin", { email, password },
+        return await axios.post(`${import.meta.env.VITE_API_URL}/user/signin`, { email, password },
             {
                 withCredentials: true
             }
@@ -51,7 +86,7 @@ export async function signInWithEmailAndPassword(email, password) {
 
 export async function getUserValidationState() {
     try {
-        const response = await axios.get("http://localhost:3000/user/validate",
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/user/validate`,
             {
                 withCredentials: true,
                 validateStatus: function (status) {
@@ -70,7 +105,7 @@ export async function getUserValidationState() {
 
 export async function logoutUser() {
     try {
-        return await axios.post("http://localhost:3000/user/signout", {},
+        return await axios.post(`${import.meta.env.VITE_API_URL}/user/signout`, {},
             {
                 withCredentials: true,
                 validateStatus: function (status) {
@@ -88,7 +123,7 @@ export async function logoutUser() {
 
 export async function sendFriendRequest(friendEmail, userId) {
     try {
-        return await axios.post("http://localhost:3000/user/friendRequest", {
+        return await axios.post(`${import.meta.env.VITE_API_URL}/user/friendRequest`, {
             id: userId,
             friendEmail: friendEmail
         }, {
@@ -104,7 +139,7 @@ export async function sendFriendRequest(friendEmail, userId) {
 
 export async function decideFriendRequestStatus(friendEmail, userId, friendRequestDecision) {
     try {
-        const response = await axios.patch("http://localhost:3000/user/friendRequest", {
+        const response = await axios.patch(`${import.meta.env.VITE_API_URL}/user/friendRequest`, {
             id: userId,
             friendEmail: friendEmail,
             friendRequestDecision: friendRequestDecision
@@ -126,7 +161,7 @@ export async function decideFriendRequestStatus(friendEmail, userId, friendReque
 
 export async function getAllUsersWithMatchingEmails(emails) {
     try {
-        const response = await axios.post("http://localhost:3000/users/by-email", { emails: [...emails] }, {
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/users/by-email`, { emails: [...emails] }, {
             withCredentials: true,
             validateStatus: function (status) {
                 return status < 500
@@ -143,7 +178,7 @@ export async function getAllUsersWithMatchingEmails(emails) {
 
 export async function deleteUserAccount(userId) {
     try {
-        const response = await axios.delete(`http://localhost:3000/user/${userId}`, {
+        const response = await axios.delete(`${import.meta.env.VITE_API_URL}/user/${userId}`, {
             withCredentials: true
         });
         return response.data;
@@ -157,7 +192,7 @@ export async function deleteUserAccount(userId) {
 
 export async function removeFriend(userEmail, friendEmail) {
     try {
-        const response = await axios.patch(`http://localhost:3000/user/removeFriend`, {
+        const response = await axios.patch(`${import.meta.env.VITE_API_URL}/user/removeFriend`, {
             email: userEmail,
             friendEmail: friendEmail
         }, {
@@ -174,7 +209,7 @@ export async function removeFriend(userEmail, friendEmail) {
 
 export async function sendMessage(friendId, message, chatId) {
     try {
-        const response = await axios.post("http://localhost:3000/user/sendMessage", {
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/user/sendMessage`, {
             friendId: friendId,
             chatId: chatId,
             message: message,

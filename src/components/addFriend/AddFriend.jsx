@@ -1,8 +1,7 @@
 import { useSocketContext } from '../../hooks/useSocketContext.js';
 import useChatStore from '../../lib/stores/user/chatStore.js';
 import useUserStore from "../../lib/stores/user/userStore";
-import { sendFriendRequest } from "../../utils/userUtils";
-import useAppStore from "../../lib/stores/app/appStore";
+import { getUserDocbyIdentifier, sendFriendRequest } from "../../utils/userUtils";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import "./addFriend.css";
@@ -11,7 +10,6 @@ export default function AddFriend({ setAddFriendRef }) {
     const addFriendRef = useRef(null);
     const setUser = useUserStore(state => state.setUser);
     const currentUser = useUserStore((state) => state.user);
-    const allUsers = useAppStore((state) => state.allUsers);
     const removeFromSearchHistory = useUserStore((state) => state.removeFromSearchHistory);
     const currentUserSearchHistory = useUserStore((state) => state.searchHistory);
     const addToSearchHistory = useUserStore((state) => state.addToSearchHistory);
@@ -36,19 +34,22 @@ export default function AddFriend({ setAddFriendRef }) {
                     _id: sentFrom._id,
                     username: sentFrom.username,
                     email: sentFrom.email,
-                    pfp: sentFrom.pfp
+                    pfp: sentFrom.pfp,
+                    status: sentFrom.status
                 });
                 initiatedChat.user = {
                     _id: sentFrom._id,
                     username: sentFrom.username,
                     email: sentFrom.email,
-                    pfp: sentFrom.pfp
+                    pfp: sentFrom.pfp,
+                    status: sentFrom.status
                 }
                 addToChats(initiatedChat);
                 toast.info(`${sentFrom.username} accepted your friend request`);
                 toast.info(`You can now initiate a chat with them!`);
             }
             removeFromSearchHistory(sentFrom.email);
+            setLastSearched("");
         }
         catch (error) {
             console.log("Error", error.message);
@@ -76,6 +77,7 @@ export default function AddFriend({ setAddFriendRef }) {
 
     useEffect(() => {
         setAddFriendRef(addFriendRef);
+        setLastSearched("");
     }, [])
 
     const addFriendHandler = async (e) => {
@@ -99,8 +101,8 @@ export default function AddFriend({ setAddFriendRef }) {
         }
     }
 
-    const getUser = (friendEmail) => {
-        return allUsers.find((user) => user.email === friendEmail);
+    const getUser = async (friendEmail) => {
+        return getUserDocbyIdentifier("email", friendEmail);
     }
 
     const handleSearch = async (e) => {
@@ -108,19 +110,18 @@ export default function AddFriend({ setAddFriendRef }) {
             e.preventDefault();
             const formData = new FormData(e.target);
             const friendEmail = Object.fromEntries(formData).email;
-            const friend = getUser(friendEmail);
+            const friend = await getUser(friendEmail);
             if (friendEmail === currentUser.email) return;
             if (!friend) {
                 toast.error("User not found or invalid email.");
                 return;
             }
-
             if (!lastSearched || lastSearched !== friendEmail) addToSearchHistory(friend);
             setLastSearched(friendEmail);
         }
-        catch (err) {
-            toast.error(err);
-            console.log(err);
+        catch (error) {
+            toast.error(error);
+            console.log(error);
         }
     }
 
@@ -142,7 +143,7 @@ export default function AddFriend({ setAddFriendRef }) {
                     const hasSentFriendRequestEarlier = currentUser.friendRequests.sent.some((email) => email === user.email);
                     return (<div className="friend" key={user._id}>
                         <div className="friendInfo">
-                            <img src={user.pfp || "/avatar.png"} alt="" />
+                            <img src={user.pfp ? `http://localhost:3000/uploads/${user.pfp}` : "/avatar.png"} alt="" />
                             <span>{user.username}</span>
                         </div>
                         <button disabled={hasSentFriendRequestEarlier} id={user._id} data-email={user.email} onClick={addFriendHandler} data-is-already-friend={isAlreadyFriend}>Add Friend</button>

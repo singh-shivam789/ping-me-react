@@ -1,6 +1,6 @@
 import { getInitialUserState, getUserValidationState } from "./utils/userUtils";
-import { fetchAllUsers, getInitialAppState } from "./utils/appUtils";
 import Notification from "./components/notification/Notification";
+import UserOnboarding from "./components/login/UserOnboarding";
 import useUserStore from "./lib/stores/user/userStore";
 import useAppStore from "./lib/stores/app/appStore";
 import Detail from "./components/detail/Detail"
@@ -11,7 +11,9 @@ import Chat from "./components/chat/Chat";
 
 const App = () => {
   const currentUser = useUserStore((state) => state.user);
-  const setUsers = useAppStore((state) => state.setUsers);
+  const isNewUser = useUserStore((state) => state.isNewUser);
+  const setIsNewUser = useUserStore((state) => state.setIsNewUser);
+  
   useEffect(() => {
     try {
       getUserValidationState().then(status => {
@@ -19,29 +21,23 @@ const App = () => {
           useUserStore.persist.clearStorage();
           useUserStore.setState(getInitialUserState());
           useAppStore.persist.clearStorage();
-          useAppStore.setState(getInitialAppState());
+          setIsNewUser(false);
         }
       }).catch((error) => {
-        throw new Error(error.message);
-      });
-
-      fetchAllUsers().then(users => {
-        setUsers(users);
-      }).catch(error => {
         throw new Error(error.message);
       });
     } catch (error) {
       console.log("Error", error.stack);
     }
-  }, [currentUser])
+  }, [currentUser, isNewUser])
 
   return (
     <div className="container">
-      {currentUser ? (<>
+      {(currentUser && !isNewUser) ? (<>
         <List />
         <Chat />
         <Detail />
-      </>) : <Login />}
+      </>) : (currentUser && isNewUser) ? <UserOnboarding /> : <Login />}
       <Notification />
     </div>
   )

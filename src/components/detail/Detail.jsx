@@ -1,7 +1,6 @@
 import { getInitialUserState, logoutUser, removeFriend } from "../../utils/userUtils";
 import useChatStore from "../../lib/stores/user/chatStore";
 import useUserStore from "../../lib/stores/user/userStore";
-import { getInitialAppState } from "../../utils/appUtils";
 import useAppStore from "../../lib/stores/app/appStore";
 import FriendOptions from "./options/FriendOptions";
 import SelfOptions from "./options/SelfOptions";
@@ -19,7 +18,7 @@ export default function Detail() {
     try {
       //TODO: handle later
     } catch (error) {
-      console.log("Error", err.message);
+      console.log("Error", error.message);
       toast.error("Something went wrong!");
     }
   }
@@ -30,12 +29,11 @@ export default function Detail() {
       useUserStore.persist.clearStorage();
       useUserStore.setState(getInitialUserState());
       useAppStore.persist.clearStorage();
-      useAppStore.setState(getInitialAppState());
       useChatStore.persist.clearStorage();
       toast.dark("Bye!");
     }
-    catch (err) {
-      console.log("Error", err.message);
+    catch (error) {
+      console.log("Error", error.message);
       toast.error("Something went wrong!");
     }
   }

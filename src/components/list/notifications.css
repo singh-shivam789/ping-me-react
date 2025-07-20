@@ -1,6 +1,7 @@
 #notification-icon>img {
     width: 20px;
     height: 20px;
+    object-fit: cover;
 }
 
 #notification-icon>img:hover {
@@ -22,15 +23,15 @@
     border-radius: 50%;
 }
 
-.notification-dot:hover{
+.notification-dot:hover {
     cursor: pointer;
 }
 
-.notifications{
+.notifications {
     border: 1px solid black;
     width: 25vw;
     max-height: 50vh;
-    overflow-y: auto; 
+    overflow-y: auto;
     padding: 25px 20px;
     background-color: rgba(69, 95, 99, 0.6);
     -webkit-backdrop-filter: blur(15px) brightness(0.5) saturate(120%);
@@ -46,40 +47,42 @@
     gap: 30px;
 }
 
-.notification{
+.notification {
     display: flex;
     align-items: center;
     justify-content: space-between;
     height: 15px;
 
-    .notificationBtns{
+    .notificationBtns {
         width: 17%;
         display: flex;
         justify-content: space-between;
     }
 
-    .notificationBtn{
+    .notificationBtn {
         padding: 5px;
         border-radius: 2px;
         border: none;
         cursor: pointer;
     }
 
-    .userInfo{
+    .userInfo {
         display: flex;
         align-items: center;
         justify-content: space-between;
         gap: 10px;
-        .notificationUserImg{
+
+        .notificationUserImg {
+            object-fit: cover;
             width: 30px;
             height: 30px;
             border-radius: 50%;
             border: none;
         }
-    }   
+    }
 
-    .notificationMessage{
-        .notificationUserName{
+    .notificationMessage {
+        .notificationUserName {
             font-weight: bolder;
         }
     }

@@ -34,7 +34,7 @@ export default function SelfOptions() {
       await deleteUserAccount(currentUser._id);
       toast.dark("Sorry to see you go 🥺");
     } catch (error) {
-      console.log("Error", err.message);
+      console.log("Error", error.message);
       toast.error("Something went wrong!");
     }
   }

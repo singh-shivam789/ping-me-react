@@ -3,7 +3,6 @@ import { useSocketContext } from '../../hooks/useSocketContext.js';
 import useOnClickOutside from '../..//hooks/useOnClickOutside.js';
 import Notifications from '../list/notifications/Notifications';
 import useUserStore from '../../lib/stores/user/userStore.js'
-import useAppStore from '../../lib/stores/app/appStore.js';
 import React, { useState, useRef, useEffect } from 'react';
 import { toast } from "react-toastify";
 import "./common.css";
@@ -12,7 +11,6 @@ export default function UtilityIconsList() {
 
   const currentUser = useUserStore(state => state.user);
   const setUser = useUserStore(state => state.setUser);
-  const addNewUser = useAppStore((state) => state.addNewUser);
 
   const [isNotificationBellActive, setIsNotificationBellActive] = useState(false);
   const notificationsVisible = useUserStore((state) => state.notificationsVisible);
@@ -32,9 +30,6 @@ export default function UtilityIconsList() {
     setUser(data.to);
     setIsNotificationBellActive(true);
   }
-  const socketNewUserHandler = (data) => {
-    addNewUser(data.newUser);
-  }
 
   useEffect(() => {
     if (socket != null) {
@@ -46,13 +41,11 @@ export default function UtilityIconsList() {
     if (isSocketActive) {
       if (currentUser !== null) {
         socket.on("friend-request-received", socketNotificationHandler);
-        socket.on("user-registered", socketNewUserHandler);
       }
     }
     else return;
     return () => {
       socket.off("friend-request-received", socketNotificationHandler);
-      socket.off("user-registered", socketNewUserHandler);
     }
   }, [socket, isSocketActive]);
 

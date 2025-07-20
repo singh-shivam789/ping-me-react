@@ -1,7 +1,7 @@
-import { decideFriendRequestStatus } from '../../../utils/userUtils'
+import { decideFriendRequestStatus, getUserById } from '../../../utils/userUtils'
 import useUserStore from "../../../lib/stores/user/userStore";
 import useChatStore from '../../../lib/stores/user/chatStore';
-import useAppStore from '../../../lib/stores/app/appStore';
+import { toast } from 'react-toastify';
 
 export default function Notification({ user }) {
   const removeFriendRequestUser = useUserStore((state) => state.removeFriendRequestUser);
@@ -14,8 +14,8 @@ export default function Notification({ user }) {
     decideFriendRequestStatus(user.email, currentUser._id, "reject").then((res) => {
       setUser(res.user);
       removeFriendRequestUser(user);
-    }).catch(err => {
-      console.log(err);
+    }).catch(error => {
+      console.log(error);
     })
   }
 
@@ -27,16 +27,18 @@ export default function Notification({ user }) {
         _id: user._id,
         username: user.username,
         email: user.email,
-        pfp: user.pfp
+        pfp: user.pfp,
+        status: user.status
       });
-      const friendId = res.initiatedChat.participants.find((id) => id !== currentUser._id)
-      const friend = useAppStore.getState().allUsers.find((user) => user._id === friendId);
-      res.initiatedChat.user = friend;
-      addToChats(res.initiatedChat);
-      toast.info(`${friend.username} accepted your friend request`);
-      toast.info(`You can now initiate a chat with them!`);
-    }).catch(err => {
-      console.log(err);
+      const friendId = res.initiatedChat.participants.find((id) => id !== currentUser._id);
+      getUserById(friendId).then((friend) => {
+        res.initiatedChat.user = friend;
+        addToChats(res.initiatedChat);
+        toast.info(`${friend.username} accepted your friend request`);
+        toast.info(`You can now initiate a chat with them!`);
+      })
+    }).catch(error => {
+      console.log("Error", error);
     })
   }
 
@@ -44,7 +46,7 @@ export default function Notification({ user }) {
   return (
     <div className='notification'>
       <div className="userInfo">
-        <img className='notificationUserImg' src={`${user.pfp}` || "./avatar.png"} />
+        <img className='notificationUserImg' src={user.pfp ? `http://localhost:3000/uploads/${user.pfp}` : "/avatar.png"} />
         <span className='notificationMessage'>
           <span className='notificationUserName'>{`${user.username}`}</span>
           <span> sent you a friend request.</span>

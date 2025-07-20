@@ -73,6 +73,7 @@ export default function FriendOptions() {
               <img src={zoomedViewUrl} />
               {createPortal(<div className="zoomedViewUserInfoContainer">
                 <div className="zoomedViewUserInfo">
+                  {/* TODO: Fix when developing chat image uploads */}
                   <img src="/avatar.png" />
                   <div className="zoomedViewUserInfoDetails">
                     <h3 style={{ marginBottom: "5px" }}>You</h3>

@@ -70,13 +70,13 @@ const ChatBottom = () => {
           setChatLastMessage(currentChat, message);
           setInputText("");
           sendMessage(chatUser._id === currentUser._id ? null : chatUser._id, message, currentChat).then((res) => {
-          }).catch((err) => {
-            throw new Error(err);
+          }).catch((error) => {
+            throw new Error(error);
           })
         }
       }
-    } catch (err) {
-      console.log("Error", err.message)
+    } catch (error) {
+      console.log("Error", error.message)
     }
   }
 
